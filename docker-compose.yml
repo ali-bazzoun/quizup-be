@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  php:
+    build: .
+    container_name: php-app
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: passingstrongpassword
+      MYSQL_DATABASE: quizapp
+      MYSQL_USER: quizuser
+      MYSQL_PASSWORD: quizpass
+    ports:
+      - "3306:3306"
