@@ -1,5 +1,5 @@
 <?php
-include('logging.php');
+include('utils/logging.php');
 
 $servername = "localhost";
 $username = "quizuser";
