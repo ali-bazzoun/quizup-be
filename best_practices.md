@@ -17,18 +17,17 @@
 - max 64 char (for phrases)
 - allow all types of chars even spaces long passwords are better.
 - use unique strong passwords
-- use multi factor auth (mfa) password, phone, biometrics (passwords are enough alone anymore, nist talks about relying only on biometrics)
+- use multi factor auth (mfa) password, phone, biometrics (passwords are not enough alone anymore, nist talks about relying only on biometrics)
 - seekless list
 - breechless
-- never store password as plain text use hashing 
+- never store password as plain text use hashing
 - recover for forget passwords
-- osp (logins with admin super privilleged should not be allowed to sign in from normal front end)
-- payettention to error message best practice: generic message do not specify anything (username or password is wrong)
+- osp (logins with admin super privileged should not be allowed to sign in from normal front end)
+- pay attention to error message best practice: generic message do not specify anything (email or password is not valid)
 - limit failed login attempts
 - use tls encrypt data
 - password manager may be good solution
 - (owas) changing email is risky ...
-
 
 ## questions? 
 

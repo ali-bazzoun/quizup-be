@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/UserDTO.php';
 require_once __DIR__ . '/../repositories/UserRepository.php';
 require_once __DIR__ . '/../utils/RegisterValidator.php';
+require_once __DIR__ . '/../utils/logging.php';
 
 class AuthService
 {
@@ -34,6 +35,7 @@ class AuthService
             return null;
         }
         if ($this->user_repo->existsByEmail($email)) {
+            log_error("email already exists.");
             return null;
         }
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
