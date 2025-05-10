@@ -1,26 +1,49 @@
 <?php
 
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/UserDTO.php';
 require_once __DIR__ . '/../repositories/UserRepository.php';
+require_once __DIR__ . '/../utils/RegisterValidator.php';
 
 class AuthService
 {
-    private UserRepository $userRepo;
+    private UserRepository $user_repo;
+    private RegisterValidator $register_validator;
 
     public function __construct()
     {
-        $this->userRepo = new UserRepository();
+        $this->user_repo = new UserRepository();
     }
 
-    public function attemptLogin(string $email, string $password): ?User
+    public function attemptLogin(string $email, string $password): ?UserDTO
     {
-        $user = $this->userRepo->findByEmail($email);
+        $user = $this->user_repo->findByEmail($email);
         if (!$user) {
             return null;
         }
         if (!password_verify($password, $user->password)) {
             return null;
         }
-        return $user;
+        return new UserDTO($user);
+    }
+
+    public function attemptRegister(string $email, string $password): ?UserDTO
+    {
+        $this->register_validator = new RegisterValidator();
+        if (!$this->register_validator->isValid($email, $password)) {
+            return null;
+        }
+        if ($this->user_repo->existsByEmail($email)) {
+            return null;
+        }
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $success = $this->user_repo->create([
+            'email' => $email,
+            'password_hash' => $passwordHash,
+        ]);
+        if (!$success) {
+            return null;
+        }
+        return new UserDTO($this->user_repo->findByEmail($email));
     }
 }

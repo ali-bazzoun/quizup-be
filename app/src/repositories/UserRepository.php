@@ -12,6 +12,13 @@ class UserRepository
 		$this->db = Database::getConnection();
 	}
 
+	public function existsByEmail(string $email): bool
+	{
+		$stmt = $this->db->prepare('SELECT 1 FROM users WHERE email = :email LIMIT 1');
+		$stmt->execute(['email' => $email]);
+		return (bool) $stmt->fetchColumn();
+	}
+
 	public function findByEmail(string $email): ?User
 	{
 		$stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');

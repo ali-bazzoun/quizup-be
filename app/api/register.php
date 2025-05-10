@@ -11,4 +11,4 @@ if (!$request || !isset($request['email']) || !isset($request['password'])) {
 }
 
 $controller = new AuthController();
-$controller->login($request);
+$controller->register($request);

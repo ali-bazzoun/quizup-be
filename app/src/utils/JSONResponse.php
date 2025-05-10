@@ -1,7 +1,7 @@
 <?php
 
 class JSONResponse {
-
+    
     public static function success($data = null, ?string $message = null, int $statusCode = 200, array $meta = null)
 	{
         $response = [
@@ -46,5 +46,4 @@ class JSONResponse {
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
-	
 }
