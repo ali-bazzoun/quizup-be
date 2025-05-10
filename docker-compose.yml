@@ -14,7 +14,7 @@ services:
     container_name: mysql-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: passingstrongpassword
+      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: quizapp
       MYSQL_USER: quizuser
       MYSQL_PASSWORD: quizpass
