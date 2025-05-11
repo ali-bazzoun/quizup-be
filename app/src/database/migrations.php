@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../utils/logging.php';
 
-$pdo = Database::getConnection(); // Make sure to call this!
+$pdo = Database::get_connection();
 
 $tables = [
     'users' => "CREATE TABLE IF NOT EXISTS users (
@@ -25,7 +25,6 @@ $tables = [
         id INT AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT NOT NULL,
         question_text TEXT NOT NULL,
-        correct_answer TEXT NOT NULL,
         FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
     )",
 
@@ -33,6 +32,7 @@ $tables = [
         id INT AUTO_INCREMENT PRIMARY KEY,
         question_id INT NOT NULL,
         option_text VARCHAR(255) NOT NULL,
+        is_correct BOOLEAN,
         FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
     )",
 
@@ -50,21 +50,22 @@ $tables = [
 $all_tables_verified = true;
 
 foreach ($tables as $name => $sql) {
-    try {
+    try 
+    {
         $stmt = $pdo->query("SHOW TABLES LIKE '$name'");
-        if ($stmt->rowCount() > 0) {
+        if ($stmt->rowCount() > 0) 
+        {
             echo "✅ Table '$name' already exists.<br>";
-            log_metric("table_exists: $name");
-        } else {
+        }
+        else 
+        {
             $pdo->exec($sql);
             echo "🆕 Table '$name' created successfully.<br>";
-            log_metric("table_created: $name");
         }
-    } catch (PDOException $e) {
+    } 
+    catch (PDOException $e) 
+    {
         echo "❌ Error with table '$name': " . $e->getMessage() . "<br>";
         log_error("Failed to process table $name: " . $e->getMessage());
-        $all_tables_verified = false;
     }
 }
-
-log_metric("tables_setup_status: " . ($all_tables_verified ? "1" : "0"));

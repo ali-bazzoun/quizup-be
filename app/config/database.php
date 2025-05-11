@@ -16,7 +16,7 @@ class Database
 
     private static $pdo = null;
 
-    public static function getConnection(): PDO
+    public static function get_connection(): PDO
     {
         if (self::$pdo === null) {
             $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$db . ";charset=" . self::$charset;
@@ -27,7 +27,6 @@ class Database
                 die("Database connection failed: " . $e->getMessage());
             }
         }
-
         return self::$pdo;
     }
 }

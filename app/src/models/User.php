@@ -10,10 +10,10 @@ class User
 
 	public function __construct(array $data)
 	{
-		$this->id            = $data['id'] ?? null;
-		$this->email         = $data['email'] ?? '';
-		$this->password_hash = $data['password_hash'] ?? '';
-		$this->created_at    = $data['created_at'] ?? null;
-		$this->updated_at    = $data['updated_at'] ?? null;
+		$this->id            = $data['id']				?? null;
+		$this->email         = $data['email']			?? '';
+		$this->password_hash = $data['password_hash']	?? '';
+		$this->created_at    = $data['created_at']		?? null;
+		$this->updated_at    = $data['updated_at']		?? null;
 	}
 }

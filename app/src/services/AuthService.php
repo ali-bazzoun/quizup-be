@@ -16,36 +16,36 @@ class AuthService
         $this->user_repo = new UserRepository();
     }
 
-    public function attemptLogin(string $email, string $password): ?UserDTO
+    public function attempt_login(string $email, string $password): ?UserDTO
     {
-        $user = $this->user_repo->findByEmail($email);
+        $user = $this->user_repo->find_by_email($email);
         if (!$user) {
             return null;
         }
-        if (!password_verify($password, $user->password)) {
+        if (!password_verify($password, $user->password_hash)) {
             return null;
         }
         return new UserDTO($user);
     }
 
-    public function attemptRegister(string $email, string $password): ?UserDTO
+    public function attempt_register(string $email, string $password): ?UserDTO
     {
         $this->register_validator = new RegisterValidator();
-        if (!$this->register_validator->isValid($email, $password)) {
+        if (!$this->register_validator->is_valid($email, $password)) {
             return null;
         }
-        if ($this->user_repo->existsByEmail($email)) {
+        if ($this->user_repo->exists_by_email($email)) {
             log_error("email already exists.");
             return null;
         }
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $success = $this->user_repo->create([
             'email' => $email,
-            'password_hash' => $passwordHash,
+            'password_hash' => $password_hash,
         ]);
         if (!$success) {
             return null;
         }
-        return new UserDTO($this->user_repo->findByEmail($email));
+        return new UserDTO($this->user_repo->find_by_email($email));
     }
 }

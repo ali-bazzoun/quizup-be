@@ -2,8 +2,8 @@
 
 class JSONResponse {
     
-    public static function success($data = null, ?string $message = null, int $statusCode = 200, array $meta = null)
-	{
+    public static function success($data = null, ?string $message = null, int $status_code = 200, array $meta = null)
+    {
         $response = [
             'status' => 'success'
         ];
@@ -16,31 +16,35 @@ class JSONResponse {
         if ($meta !== null) {
             $response['meta'] = $meta;
         }
-        return self::json($response, $statusCode);
+        return self::json($response, $status_code);
     }
     
-    public static function error(?string $message = null, int $statusCode = 400, $errors = null, array $meta = null)
-	{
+    public static function error(?string $message = null, int $status_code = 400, $errors = null, array $meta = null)
+    {
         $response = [
             'status' => 'error'
         ];
-        if ($message !== null) {
+        if ($message !== null)
+        {
             $response['message'] = $message;
         }
-        if ($errors !== null) {
+        if ($errors !== null)
+        {
             $response['errors'] = $errors;
         }
-        if ($meta !== null) {
+        if ($meta !== null)
+        {
             $response['meta'] = $meta;
         }
-        return self::json($response, $statusCode);
+        return self::json($response, $status_code);
     }
     
-    public static function json($data, int $statusCode = 200, array $headers = [])
-	{
+    public static function json($data, int $status_code = 200, array $headers = [])
+    {
         $headers['Content-Type'] = 'application/json';
-        http_response_code($statusCode);
-        foreach ($headers as $name => $value) {
+        http_response_code($status_code);
+        foreach ($headers as $name => $value)
+        {
             header("$name: $value");
         }
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

@@ -1,5 +1,24 @@
 # best practices
 
+## structure
+
+Stick to this minimum structure for clarity:
+
+1. Model
+2. Repository
+3. Service
+4. Controller
+
+## docker
+
+- log to stderr
+- use some specialized containers for metrics
+
+## database
+
+- how to store images in database
+- what is migration
+
 ## php
 
 - not to add ?> at the end of the php file unless there is html in the php file
@@ -29,6 +48,15 @@
 - password manager may be good solution
 - (owas) changing email is risky ...
 
-## questions? 
+## questions?
 
 - i did not use validator for logging in is it considered a best practice?
+
+○ Create quiz
+○ Get all quizzes
+○ Edit quiz
+○ Delete quiz
+○ Create question
+○ Get questions of specific quiz
+○ Edit question
+○ Delete question
