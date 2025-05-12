@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../services/AuthService.php';
-require_once __DIR__ . '/../src/utils/response.php';
+require_once __DIR__ . '/../src/services/AuthService.php';
 require_once __DIR__ . '/../src/utils/RegisterValidator.php';
+require_once __DIR__ . '/../src/utils/response.php';
+require_once __DIR__ . '/../src/utils/logging.php';
 
 $requestBody = file_get_contents('php://input');
 $request = json_decode($requestBody, true);
@@ -13,10 +14,11 @@ if (!$request || !isset($request['email']) || !isset($request['password']))
     exit;
 }
 
-$errors = RegisterValidator::validate($data);
+$errors = RegisterValidator::validate($request);
 if ($errors)
 {
-    JsonResponse::error('Invalid input', 422, ['errors' => $errors]);
+    JsonResponse::error('Invalid input', 422);
+    log_error("Validation failed: " . print_r($errors, true), 'ERROR');
     exit;
 }
 
@@ -24,7 +26,7 @@ $auth_service = new AuthService();
 
 try
 {
-    $user = $this->auth_service->attempt_register($request['email'], $request['password']);
+    $user = $auth_service->attempt_register($request['email'], $request['password']);
     if (!$user)
     {
         JsonResponse::error('Invalid credentials', 401);

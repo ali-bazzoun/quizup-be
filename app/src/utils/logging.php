@@ -7,18 +7,20 @@ function log_error(string $message, string $level = 'ERROR', ?Throwable $excepti
 
     if ($exception) {
         $log_line .= ' | ' . $exception->getMessage() .
-                    ' in ' . $exception->getFile() .
-                    ':' . $exception->getLine();
+                     ' in ' . $exception->getFile() .
+                     ':' . $exception->getLine();
     }
 
     $log_line .= "\n";
 
+    // Log to STDERR (console) if defined, otherwise log to PHP error log
     if (defined('STDERR'))
     {
         fwrite(STDERR, $log_line);
     }
     else
     {
-        error_log($log_line);
+        error_log($log_line); // Logs to the default PHP error log
     }
 }
+?>

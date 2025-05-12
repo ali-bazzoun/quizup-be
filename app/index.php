@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/src/database/migrations.php';
+require_once __DIR__ . '/src/database/create_tables.php';
 require_once __DIR__ . '/src/repositories/QuizRepository.php';
 
 $repo = new QuizRepository();

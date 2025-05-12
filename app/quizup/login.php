@@ -13,7 +13,7 @@ if (!$request || !isset($request['email']) || !isset($request['password']))
     exit;
 }
 
-$errors = LoginValidator::validate($data);
+$errors = LoginValidator::validate($request);
 if ($errors)
 {
     JsonResponse::error('Invalid input', 422, ['errors' => $errors]);
