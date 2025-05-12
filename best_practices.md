@@ -59,8 +59,6 @@ Stick to this minimum structure for clarity:
 
 ## questions?
 
-- i did not use validator for logging in is it considered a best practice?
-
 ○ Create quiz
 ○ Get all quizzes
 ○ Edit quiz

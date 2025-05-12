@@ -17,21 +17,21 @@ $tables = [
     'quizzes' => "CREATE TABLE IF NOT EXISTS quizzes (
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL UNIQUE,
-        quiz_description TEXT,
+        description TEXT,
         image_path VARCHAR(255)
     )",
 
     'questions' => "CREATE TABLE IF NOT EXISTS questions (
         id INT AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT NOT NULL,
-        question_text TEXT NOT NULL,
+        text TEXT NOT NULL,
         FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
     )",
 
     'options' => "CREATE TABLE IF NOT EXISTS options (
         id INT AUTO_INCREMENT PRIMARY KEY,
         question_id INT NOT NULL,
-        option_text VARCHAR(255) NOT NULL,
+        text VARCHAR(255) NOT NULL,
         is_correct BOOLEAN,
         FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
     )",

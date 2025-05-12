@@ -31,7 +31,7 @@ abstract class BaseRepository
         return new $this->model_class($data);
     }
 
-    public function exists(int $id): bool
+    public function exist(int $id): bool
     {
         return ($this->find($id) != NULL);
     }

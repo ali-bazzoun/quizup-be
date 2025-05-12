@@ -13,7 +13,7 @@ $repo = new QuizRepository();
 // ]);
 // echo $created ? "✅ User created<br>" : "❌ Failed to create user<br>";
 
-// 🧪 2. Find by email
+// 🧪 2. Find
 echo "<h3>Find</h3>";
 $find = $repo->find(2);
 if ($find) {

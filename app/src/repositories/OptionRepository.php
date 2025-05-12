@@ -1,16 +1,13 @@
 <?php
 
-require_once __DIR__ . '/BaseRepository.php';
 require_once __DIR__ . '/../models/Option.php';
+require_once __DIR__ . '/BaseRepository.php';
 
 class OptionRepository extends BaseRepository
 {
     public function __construct()
     {
-        $fillable = [
-            option_text,
-            is_correct
-        ];
+        $fillable = ['question_id', 'option_text', 'is_correct'];
         parent::__construct('options', Option::class, $fillable);
     }
 

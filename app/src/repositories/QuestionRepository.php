@@ -1,15 +1,18 @@
 <?php
 
+require_once __DIR__ . '/../models/Question.php';
 require_once __DIR__ . '/BaseRepository.php';
 require_once __DIR__ . '/OptionRepository.php';
-require_once __DIR__ . '/../models/Question.php';
 
 class QuestionRepository extends BaseRepository
 {
+    private OptionRepository $option_repo;
+
     public function __construct()
     {
-        $fillable = [question_text];
+        $fillable = ['quiz_id', 'question_text'];
         parent::__construct('questions', Question::class, $fillable);
+        $this->option_repo = new OptionRepository();
     }
 
     public function all_by_quiz_id(int $quiz_id): array
@@ -20,7 +23,7 @@ class QuestionRepository extends BaseRepository
         return array_map(fn($row) => new $this->model_class($row), $rows);
     }
 
-    public function find_by_quiz_id_with_options(int $quiz_id): array
+    public function all_by_quiz_id_with_options(int $quiz_id): array
     {
         $questions = $this->all_by_quiz_id($quiz_id);
 
@@ -29,10 +32,9 @@ class QuestionRepository extends BaseRepository
             return [];
         }
 
-        $option_repo = new OptionRepository();
         foreach($questions as $question)
         {
-            $question->options = $option_repo->find_by_question_id($question->id);
+            $question->options = $this->option_repo->all_by_question_id($question->id);
         }
         return $questions;
     }

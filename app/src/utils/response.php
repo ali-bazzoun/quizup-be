@@ -1,19 +1,22 @@
 <?php
 
-class JsonResponse {
-    
+class JsonResponse
+{
     public static function success($data = null, ?string $message = null, int $status_code = 200, array $meta = null)
     {
         $response = [
             'status' => 'success'
         ];
-        if ($data !== null) {
+        if ($data !== null)
+        {
             $response['data'] = $data;
         }
-        if ($message !== null) {
+        if ($message !== null)
+        {
             $response['message'] = $message;
         }
-        if ($meta !== null) {
+        if ($meta !== null)
+        {
             $response['meta'] = $meta;
         }
         return self::json($response, $status_code);
