@@ -19,10 +19,12 @@ class AuthService
     public function attempt_login(string $email, string $password): ?UserDTO
     {
         $user = $this->user_repo->find_by_email($email);
-        if (!$user) {
+        if (!$user)
+        {
             return null;
         }
-        if (!password_verify($password, $user->password_hash)) {
+        if (!password_verify($password, $user->password_hash))
+        {
             return null;
         }
         return new UserDTO($user);
@@ -30,11 +32,8 @@ class AuthService
 
     public function attempt_register(string $email, string $password): ?UserDTO
     {
-        $this->register_validator = new RegisterValidator();
-        if (!$this->register_validator->is_valid($email, $password)) {
-            return null;
-        }
-        if ($this->user_repo->exists_by_email($email)) {
+        if ($this->user_repo->exists_by_email($email))
+        {
             log_error("Email already exists.");
             return null;
         }

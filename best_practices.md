@@ -14,6 +14,7 @@ Stick to this minimum structure for clarity:
 - all functions related to direct data_base and security of the data in model/repo layer
 - handle logic and business in service layer
 - add last line of defense in the data layer and considering handling errors if it occurs their
+- handle input validation at control layer, the closest layer to the input
 
 ## docker
 

@@ -1,24 +1,39 @@
 <?php
 
-require_once __DIR__ . '/logging.php';
-
 class RegisterValidator
 {
-    public function is_valid(string $email, string $password): bool
+    public static function validate(array $data): array
     {
-        $length = strlen($password);
-        if ($length < 8 || $length > 64) {
-            log_error("password length is not correct.");
-            return false;
+        $errors = [];
+
+        if (empty($data['email']))
+        {
+            $errors['email'] = 'Email is required.';
         }
-        if (!preg_match('/^[\x20-\x7E]*$/', $password)) {
-            log_error("password character's are not allowed.");
-            return false;
+        elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+        {
+            $errors['email'] = 'Email is invalid.';
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            log_error("email is not valid.");
-            return false;
+
+        if (empty($data['password']))
+        {
+            $errors['password'] = 'Password is required.';
         }
-        return true;
+        else
+        {
+            $password = $data['password'];
+            $length = strlen($password);
+
+            if ($length < 8 || $length > 64)
+            {
+                $errors['password'] = 'Password must be between 8 and 64 characters.';
+            }
+            elseif (!preg_match('/^[\x20-\x7E]*$/', $password))
+            {
+                $errors['password'] = 'Password contains invalid characters.';
+            }
+        }
+
+        return $errors;
     }
 }

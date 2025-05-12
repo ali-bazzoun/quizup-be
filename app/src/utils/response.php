@@ -1,6 +1,6 @@
 <?php
 
-class JSONResponse {
+class JsonResponse {
     
     public static function success($data = null, ?string $message = null, int $status_code = 200, array $meta = null)
     {

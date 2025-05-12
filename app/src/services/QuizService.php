@@ -11,6 +11,11 @@ class QuizService
 		$this->repo = new QuizRepository();
 	}
 
+	public function create_quiz($data)
+	{
+		
+	}
+
 	public function get_valid_quizzes(): array
 	{
 		$all_quizzes = $this->repo->all_with_questions();

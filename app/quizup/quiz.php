@@ -12,7 +12,7 @@ try
 	{
         case 'GET':
             $quizzes = $quiz_service->getValidQuizzes();
-            JSONResponse::success(['quizzes' => $quizzes], 'Valid Quizzes');
+            JsonResponse::success(['quizzes' => $quizzes], 'Valid Quizzes');
             break;
 
         case 'PUT':
@@ -21,11 +21,11 @@ try
 
             if ($id && $data && $quiz_service->updateQuiz((int)$id, $data))
 			{
-                JSONResponse::success(null, 'Quiz updated successfully');
+                JsonResponse::success(null, 'Quiz updated successfully');
             }
 			else
 			{
-                JSONResponse::error('Update failed', 400);
+                JsonResponse::error('Update failed', 400);
             }
             break;
 
@@ -33,19 +33,19 @@ try
             $id = $_GET['id'] ?? null;
             if ($id && $quiz_service->deleteQuiz((int)$id))
 			{
-                JSONResponse::success(null, 'Quiz deleted successfully');
+                JsonResponse::success(null, 'Quiz deleted successfully');
             }
 			else
 			{
-                JSONResponse::error('Delete failed', 400);
+                JsonResponse::error('Delete failed', 400);
             }
             break;
 
         default:
-            JSONResponse::error('Method not allowed', 405);
+            JsonResponse::error('Method not allowed', 405);
     }
 }
 catch (Throwable $e)
 {
-    JSONResponse::error("Server error: " . $e->getMessage(), 500);
+    JsonResponse::error("Server error: " . $e->getMessage(), 500);
 }
