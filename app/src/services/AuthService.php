@@ -35,7 +35,7 @@ class AuthService
             return null;
         }
         if ($this->user_repo->exists_by_email($email)) {
-            log_error("email already exists.");
+            log_error("Email already exists.");
             return null;
         }
         $password_hash = password_hash($password, PASSWORD_DEFAULT);

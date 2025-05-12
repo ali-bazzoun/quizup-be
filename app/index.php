@@ -1,37 +1,34 @@
 <?php
 
 require_once __DIR__ . '/src/database/migrations.php';
-require_once __DIR__ . '/src/repositories/UserRepository.php';
+require_once __DIR__ . '/src/repositories/QuizRepository.php';
 
-$repo = new UserRepository();
+$repo = new QuizRepository();
 
-// // // 🧪 1. Create a user
-// echo "<h3>Create User</h3>";
+// // // 🧪 1. Create
+// echo "<h3>Create</h3>";
 // $created = $repo->create([
-//     'email' => 'testuser@example.com',
-//     'password_hash' => password_hash('secret123', PASSWORD_DEFAULT)
+//     'title' => 'linear algebra',
+//     'quiz_description' => 'Non aute ea adipisicing culpa officia laborum.'
 // ]);
 // echo $created ? "✅ User created<br>" : "❌ Failed to create user<br>";
 
 // 🧪 2. Find by email
-echo "<h3>Find by Email</h3>";
-$user = $repo->find_by_email('testuser@example.com');
-if ($user) {
-    echo "✅ Found: ID = {$user->id}, Email = {$user->email}<br>";
+echo "<h3>Find</h3>";
+$find = $repo->find(2);
+if ($find) {
+    echo "✅ Found: ID = {$find->id}, Description = {$find->quiz_description}<br>";
 } else {
     echo "❌ User not found<br>";
 }
 
-// 🧪 3. Update password
-echo "<h3>Update Password</h3>";
-if ($user) {
-    $updated = $repo->update_password($user->id, password_hash('newpassword456', PASSWORD_DEFAULT));
-    echo $updated ? "✅ Password updated<br>" : "❌ Failed to update password<br>";
-}
+// // 🧪 3. Update 
+// echo "<h3>Update</h3>";
+// $updated = $repo->update(2, ['image_path' => '/some/thing']);
+// echo $updated ? "✅ updated<br>" : "❌ Failed to update<br>";
 
-// 🧪 4. Delete user
-echo "<h3>Delete User</h3>";
-if ($user) {
-    $deleted = $repo->delete($user->id);
-    echo $deleted ? "✅ User deleted<br>" : "❌ Failed to delete user<br>";
-}
+// // 🧪 4. Delete
+// echo "<h3>Delete</h3>";
+// $deleted = $repo->delete(1);
+// echo $deleted ? "✅ deleted<br>" : "❌ Failed to delete<br>";
+

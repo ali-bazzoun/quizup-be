@@ -8,22 +8,17 @@ class QuizRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct('quizzes', Quiz::class);
+        $fillable = [
+            'title',
+            'quiz_description',
+            'image_path'
+        ];
+        parent::__construct('quizzes', Quiz::class, $fillable);
     }
 
-    public function get_all(): array
+    public function all_with_questions(): array
     {
-        $sql = "SELECT * FROM `quizzes`";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return array_map(fn(array $data) => new $this->model_class($data), $rows);
-    }
-
-    public function get_all_with_questions(): array
-    {
-        $quizzes = $this->get_all();
+        $quizzes = $this->all();
 
         if (empty($quizzes))
         {
@@ -33,7 +28,7 @@ class QuizRepository extends BaseRepository
         $question_repo = new QuestionRepository();
         foreach ($quizzes as $quiz)
         {
-            $quiz->questions = $question_repo->find_by_quiz_id_with_options($quiz->id);
+            $quiz->questions = $question_repo->all_by_quiz_id_with_options($quiz->id);
         }
         return $quizzes;
     }

@@ -8,18 +8,20 @@ abstract class BaseRepository
     protected \PDO 		$db;
 	protected string	$table;
     protected string	$model_class;
+    protected array     $fillable;
 
-    public function __construct(string $table, string $model_class)
+    public function __construct(string $table, string $model_class, array $fillable)
     {
+        $this->db = Database::get_connection();
         $this->table = $table;
         $this->model_class = $model_class;
-        $this->db = Database::get_connection();
+        $this->fillable = $fillable;
     }
 
     public function find(int $id): ?object
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE id = :id LIMIT 1";
-        $data = $this->execute_query($sql, ['id' => $id], true);
+        $data = $this->execute_query($sql, ['id' => $id], 'fetch');
 
         if (!$data)
 		{
@@ -29,6 +31,19 @@ abstract class BaseRepository
         return new $this->model_class($data);
     }
 
+    public function exists(int $id): bool
+    {
+        return ($this->find($id) != NULL);
+    }
+
+    public function all(): array
+    {
+        $sql = "SELECT * FROM `{$this->table}`";
+        $rows = $this->execute_query($sql, [], 'fetch_all');
+
+        return array_map(fn(array $data) => new $this->model_class($data), $rows);
+    }
+
     public function create(array $data): ?object
     {
         if (empty($data))
@@ -36,6 +51,8 @@ abstract class BaseRepository
             log_error("Data array cannot be empty.");
             throw new InvalidArgumentException("Data array cannot be empty.");
         }
+
+        $data = $this->filter_allowed_data($data);
 
         $columns = array_keys($data);
         $placeholders = array_map(fn($col) => ':' . $col, $columns);
@@ -61,7 +78,7 @@ abstract class BaseRepository
             throw new InvalidArgumentException("Data array cannot be empty.");
         }
 
-		unset($data['id']);
+        $data = $this->filter_allowed_data($data);
 
         $set_clauses = array_map(fn($col) => "`$col` = :$col", array_keys($data));
         $sql = sprintf(
@@ -73,27 +90,50 @@ abstract class BaseRepository
         $params = $data;
         $params['id'] = $id;
 
-        $affectedRows = $this->execute_query($sql, $params);
-        return $affectedRows > 0;
+        $affected_rows = $this->execute_query($sql, $params);
+        return $affected_rows > 0;
     }
 
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM `{$this->table}` WHERE id = :id";
-        $affectedRows = $this->execute_query($sql, ['id' => $id]);
-        return $affectedRows > 0;
+        $affected_rows = $this->execute_query($sql, ['id' => $id]);
+        return $affected_rows > 0;
     }
 
-    private function execute_query(string $sql, array $params = [], bool $fetch = false)
+
+    protected function filter_allowed_data(array $data): array
+    {
+        $filtered_data = [];
+
+        foreach($data as $key => $value)
+        {
+            if (in_array($key, $this->fillable))
+            {
+                $filtered_data[$key] = $value;
+            }
+        }
+        return $filtered_data;
+    }
+
+    protected function execute_query(string $sql, array $params = [], string $resultType = 'row_count')
     {
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
 
-        if ($fetch)
-		{
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+        switch ($resultType)
+        {
+            case 'fetch': 
+                return $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $stmt->rowCount();
+            case 'fetch_all':
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            case 'row_count':
+                return $stmt->rowCount();
+
+            default:
+                throw new InvalidArgumentException("Invalid result type specified.");
+        }
     }
 }

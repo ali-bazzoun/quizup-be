@@ -7,6 +7,7 @@ class ScoreRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct('scores', Score::class);
+        $fillable = ['score'];
+        parent::__construct('scores', Score::class, $fillable);
     }
 }

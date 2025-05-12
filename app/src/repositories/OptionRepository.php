@@ -7,15 +7,17 @@ class OptionRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct('options', Option::class);
+        $fillable = [
+            option_text,
+            is_correct
+        ];
+        parent::__construct('options', Option::class, $fillable);
     }
 
-    public function find_by_question_id(int $question_id): array
+    public function all_by_question_id(int $question_id): array
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE question_id = :question_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['question_id' => $question_id]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $this->execute_query($sql, ['question_id' => $question_id], 'fetch_all');
 
         return array_map(fn($row) => new $this->model_class($row), $rows);
     }

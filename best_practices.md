@@ -9,6 +9,12 @@ Stick to this minimum structure for clarity:
 3. Service
 4. Controller
 
+### separation of concerns
+
+- all functions related to direct data_base and security of the data in model/repo layer
+- handle logic and business in service layer
+- add last line of defense in the data layer and considering handling errors if it occurs their
+
 ## docker
 
 - log to stderr
@@ -18,6 +24,8 @@ Stick to this minimum structure for clarity:
 
 - how to store images in database
 - what is migration
+- when making update function pay the attention to the allowed fields that can be updated
+- wrap the entire prepare/execute in a try { … } catch (PDOException $e) { log_error($e); throw $e; } so that you log every SQL error with context.
 
 ## php
 
@@ -60,3 +68,11 @@ Stick to this minimum structure for clarity:
 ○ Get questions of specific quiz
 ○ Edit question
 ○ Delete question
+
+## frameworks to learn
+
+### testing
+
+- PHPUnit – standard testing framework
+- Mockery or PHPUnit built-in mocks – mocking DB behavior
+- Faker – for generating fake test data

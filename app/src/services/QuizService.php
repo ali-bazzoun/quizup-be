@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../repositories/QuizRepository.php';
+
 class QuizService
 {
 	private QuizRepository $repo;
@@ -11,7 +13,7 @@ class QuizService
 
 	public function get_valid_quizzes(): array
 	{
-		$all_quizzes = $this->repo->get_all_with_questions();
+		$all_quizzes = $this->repo->all_with_questions();
 		$valid_quizzes = [];
 
 		foreach ($all_quizzes as $quiz)
