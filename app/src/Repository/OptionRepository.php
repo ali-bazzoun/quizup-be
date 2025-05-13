@@ -15,7 +15,6 @@ class OptionRepository extends BaseRepository
     {
         $sql = "SELECT * FROM `{$this->table}` WHERE question_id = :question_id";
         $rows = $this->execute_query($sql, ['question_id' => $question_id], 'fetch_all');
-
         return array_map(fn($row) => new $this->model_class($row), $rows);
     }
 }

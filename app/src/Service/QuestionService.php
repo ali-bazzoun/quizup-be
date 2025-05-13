@@ -29,20 +29,15 @@ class QuestionService
 			log_error("Quiz with ID $quiz_id does not exist.");
 			return false;
 		}
-
 		$this->db->beginTransaction();
-
 		try
 		{
 			$question = $this->question_repo->create($data);
-			$question_id = $question->id;
-
 			foreach ($data['options'] ?? [] as $opt_data)
 			{
-				$opt_data['question_id'] = $question_id;
+				$opt_data['question_id'] = $question->id;
 				$this->option_repo->create($opt_data);
 			}
-
 			$this->db->commit();
 			return true;
 		}
@@ -56,15 +51,16 @@ class QuestionService
 
 	public function get_valid_questions(int $quiz_id)
 	{
+		if (!$this->quiz_repo->exists($quiz_id))
+		{
+			log_error("Quiz with ID $quiz_id does not exist.");
+			return false;
+		}
 		$questions =  $this->question_repo->all_by_quiz_id_with_options($quiz_id);
 		$valid_questions = [];
 		foreach($questions as $question)
-		{
 			if (count($question->options) > 1)
-			{
 				$valid_questions[] = $question;
-			}
-		}
 		return $valid_questions;
 	}
 
@@ -81,7 +77,7 @@ class QuestionService
 
 	public function delete_question(int $id): bool
 	{
-		if (!$this->quiz_repo->exists($id))
+		if (!$this->question_repo->exists($id))
 		{
 			log_error("Question with ID $id does not exist.");
 			return false;

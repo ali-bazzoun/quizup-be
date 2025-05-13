@@ -6,8 +6,8 @@ setup_database();
 
 if ($_SERVER['REQUEST_URI'] === '/')
 {
-    echo "<h1>Welcome to the Quiz App!</h1>";
-    echo "<p>It seems you are visiting the home page. If you're looking for the API, head over to <strong>/api</strong> routes.</p>";
+    echo "<h1>Welcome to QuizUp!</h1>";
+    echo "<p>If you're looking for the API, head over to <strong>/quizup/api</strong> routes.</p>";
     exit;
 }
 
@@ -21,35 +21,43 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch (true)
 {
-    case preg_match('#^/api/auth/login$#', $uri):
+    case preg_match('#^/quizup/api/auth/login$#', $uri):
         (new AuthController())->login(json_request_body());
         break;
 
-    case preg_match('#^/api/auth/register$#', $uri):
+    case preg_match('#^/quizup/api/auth/register$#', $uri):
         (new AuthController())->register(json_request_body());
         break;
 
-    case $uri === '/api/quizzes' && $method === 'GET':
+    case $uri === '/quizup/api/quizzes' && $method === 'GET':
         (new QuizController())->get_quizzes();
         break;
 
-    case $uri === '/api/quizzes' && $method === 'POST':
+    case $uri === '/quizup/api/quizzes' && $method === 'POST':
         (new QuizController())->create_quiz();
         break;
 
-    case preg_match('#^/api/quizzes/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
+    case $uri === '/quizup/api/quizzes' && $method === 'PUT':
+        (new QuizController())->get_quizzes(json_request_body());
+        break;
+
+    case preg_match('#^/quizup/api/quizzes/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
         (new QuizController())->delete_quiz((int)$id_match[1]);
         break;
 
-    case $uri === '/api/questions' && $method === 'GET':
+    case $uri === '/quizup/api/questions' && $method === 'GET':
         (new QuestionController())->get_questions();
         break;
 
-    case $uri === '/api/questions' && $method === 'POST':
+    case $uri === '/quizup/api/questions' && $method === 'POST':
         (new QuestionController())->create_question();
         break;
+    
+    case $uri === '/quizup/api/questions' && $method === 'PUT':
+        (new QuestionController())->edit_question(json_request_body());
+        break;
 
-    case preg_match('#^/api/questions/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
+    case preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
         (new QuestionController())->delete_question((int)$id_match[1]);
         break;
 

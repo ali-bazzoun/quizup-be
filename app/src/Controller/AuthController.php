@@ -22,7 +22,6 @@ class AuthController
             JsonResponse::error('Invalid request format', 400);
             return;
         }
-
         $errors = RegisterValidator::validate($request);
         if ($errors)
         {
@@ -30,7 +29,6 @@ class AuthController
             JsonResponse::error('Invalid input', 422);
             return;
         }
-
         try
         {
             $user = $this->auth_service->attempt_register($request['email'], $request['password']);
@@ -55,7 +53,6 @@ class AuthController
             JsonResponse::error('Invalid request format', 400);
             return;
         }
-
         $errors = LoginValidator::validate($request);
         if ($errors)
         {
@@ -63,7 +60,6 @@ class AuthController
             JsonResponse::error('Invalid input', 422);
             return;
         }
-
         try
         {
             $user = $this->auth_service->attempt_login($request['email'], $request['password']);

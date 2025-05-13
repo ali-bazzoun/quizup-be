@@ -13,48 +13,39 @@ class QuizController
         $this->quiz_service = new QuizService();
     }
 
-    private function get_quizzes(): void
+    public function get_quizzes(): void
     {
         $quizzes = $this->quiz_service->get_valid_quizzes();
         JsonResponse::success(['quizzes' => $quizzes], 'Valid Quizzes');
     }
 
-    private function create_quiz(): void
+    public function create_quiz($data): void
     {
-        $data = json_decode(file_get_contents('php://input'), true);
         $data = normalize_create_quiz_data($data);
         if ($data && $this->quiz_service->create_quiz($data))
-        {
             JsonResponse::success(null, 'Quiz created successfully');
-        }
         else
-        {
             JsonResponse::error('Create failed', 400);
-        }
     }
 
-    private function update_quiz(): void
+    public function edit_quiz($data): void
     {
-        $data = json_decode(file_get_contents('php://input'), true);
-        if ($data && $this->quiz_service->update_quiz($data))
+        if (!isset($data['id']) || !is_numeric($data['id']))
         {
+	        log_error("Missing or invalid quiz ID.");
+	        return false;
+        }
+        if ($data && $this->quiz_service->edit_quiz($data))
             JsonResponse::success(null, 'Quiz updated successfully');
-        }
         else
-        {
             JsonResponse::error('Update failed', 400);
-        }
     }
 
-    private function delete_quiz(?int $id): void
+    public function delete_quiz(?int $id): void
     {
         if ($id && $this->quiz_service->delete_quiz($id))
-        {
             JsonResponse::success(null, 'Quiz deleted successfully');
-        }
         else
-        {
             JsonResponse::error('Delete failed', 400);
-        }
     }
 }

@@ -15,6 +15,7 @@ Stick to this minimum structure for clarity:
 - handle logic and business in service layer
 - add last line of defense in the data layer and considering handling errors if it occurs their
 - handle input validation at control layer, the closest layer to the input
+- routing not in controller layer (in Router class or index)
 
 ## docker
 
@@ -74,14 +75,14 @@ Stick to this minimum structure for clarity:
 - **Models/Entities:** Represent your data structures.
 - **Repositories (Optional but Recommended):** Encapsulate the logic for fetching and persisting data, abstracting the database from your services.
 
-## Open/Closed Principle (OCP)
+### Open/Closed Principle (OCP)
 
 Your system should be open for extension but closed for modification.
 
 - Using interfaces for services or repositories allows you to swap out implementations (e.g., a different database, a mock for testing) without changing the controller code that uses them.
-- Middleware can be added to the request/response pipeline without altering core controller or service logic.   
+- Middleware can be added to the request/response pipeline without altering core controller or service logic.
 
-## Liskov Substitution Principle (LSP)
+### Liskov Substitution Principle (LSP)
 
 Subtypes must be substitutable for their base types. When using inheritance (though favor composition), ensure derived classes can replace their parent classes without altering the correctness of the program.
 

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Util/logging.php';
 
 function setup_database()
 {
-     $pdo = Database::get_connection();
+    $pdo = Database::get_connection();
 
     $tables = [
         'users' => "CREATE TABLE IF NOT EXISTS users (
@@ -55,17 +55,11 @@ function setup_database()
         {
             $stmt = $pdo->query("SHOW TABLES LIKE '$name'");
             if ($stmt->rowCount() > 0) 
-            {
                 $done = 1;
-            }
             else 
-            {
                 $pdo->exec($sql);
-            }
         } 
         catch (PDOException $e) 
-        {
             log_error("Failed to process table $name: " . $e->getMessage());
-        }
     }
 }
