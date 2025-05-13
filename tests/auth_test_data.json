@@ -1,0 +1,98 @@
+[
+  {
+    "email": "emma.jones@example.com",
+    "password": "Str0ngP@ss!"
+  },
+  {
+    "email": "oliver.wilson@example.com",
+    "password": ""  
+  },
+  {
+    "email": "ava.taylor@example.com",
+    "password": "password"
+  },
+  {
+    "email": "liam_brown@example.com",
+    "password": "Complex123$"
+  },
+  {
+    "email": "isabella.davis@example.com",
+    "password": "short1!"
+  },
+  {
+    "email": "sophia.evans@@example.com",
+    "password": "ValidP@ss123"
+  },
+  {
+    "email": "jack.miller@.com",
+    "password": "SecurePass12#"
+  },
+  {
+    "email": "charlie.moore@example.com",
+    "password": "Another$Pass123"
+  },
+  {
+    "email": "",
+    "password": "Valid123@"
+  },
+  {
+    "email": "noah.walker@example.com",
+    "password": "      "
+  },
+  {
+    "email": "ethan.hall@example.com",
+    "password": "VeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongPassword123!"
+  },
+  {
+    "email": "lucas.adams@example.com",
+    "password": "NoSpecialChar123"
+  },
+  {
+    "email": "mia.harris@example.com",
+    "password": "NO_LOWERCASE123!"
+  },
+  {
+    "email": "zoe.clark@example.com",
+    "password": "no_uppercase123!"
+  },
+  {
+    "email": "sam.thomas@example.com",
+    "password": "Proper1!"
+  },
+  {
+    "email": "sql.inject@example.com",
+    "password": "'; DROP TABLE users; --"
+  },
+  {
+    "email": "white.space@example.com ",
+    "password": "ValidPass123!"
+  },
+  {
+    "email": "duplicate@example.com",
+    "password": "Valid123!"
+  },
+  {
+    "email": "duplicate@example.com",
+    "password": "AnotherValid123@"
+  },
+  {
+    "email": "   ",
+    "password": "ValidPass123!"
+  },
+  {
+    "email": "valid.alllowercase@example.com",
+    "password": "StrongP@ss456!"
+  },
+  {
+    "email": "averyaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryavery@example.com",
+    "password": "StrongPass123!"
+  },
+  {
+    "email": "jayden.long@example.com",
+    "password": "Short1!"
+  },
+  {
+    "email": "brooklyn.fox@example.com",
+    "password": "This1Is2Strong!"
+  }
+]

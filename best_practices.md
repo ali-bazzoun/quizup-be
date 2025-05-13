@@ -57,17 +57,6 @@ Stick to this minimum structure for clarity:
 - password manager may be good solution
 - (owas) changing email is risky ...
 
-## questions?
-
-○ Create quiz
-○ Get all quizzes
-○ Edit quiz
-○ Delete quiz
-○ Create question
-○ Get questions of specific quiz
-○ Edit question
-○ Delete question
-
 ## frameworks to learn
 
 ### testing
@@ -75,3 +64,28 @@ Stick to this minimum structure for clarity:
 - PHPUnit – standard testing framework
 - Mockery or PHPUnit built-in mocks – mocking DB behavior
 - Faker – for generating fake test data
+
+## solid principles
+
+### Single Responsibility Principle (SRP)
+
+- **Controllers:** Their sole responsibility is to handle incoming HTTP requests, validate input (often by delegating to a validation service/component), call appropriate services to perform the core logic, and then format and return an HTTP response (e.g., JSON). They shouldn't contain business logic or direct database queries.
+- **Services:** Contain the core business logic. For example, a UserService might handle user registration, login verification, profile updates, etc.
+- **Models/Entities:** Represent your data structures.
+- **Repositories (Optional but Recommended):** Encapsulate the logic for fetching and persisting data, abstracting the database from your services.
+
+## Open/Closed Principle (OCP)
+
+Your system should be open for extension but closed for modification.
+
+- Using interfaces for services or repositories allows you to swap out implementations (e.g., a different database, a mock for testing) without changing the controller code that uses them.
+- Middleware can be added to the request/response pipeline without altering core controller or service logic.   
+
+## Liskov Substitution Principle (LSP)
+
+Subtypes must be substitutable for their base types. When using inheritance (though favor composition), ensure derived classes can replace their parent classes without altering the correctness of the program.
+
+- Interface Segregation Principle (ISP): Clients should not be forced to depend on interfaces they do not use.
+- Define small, specific interfaces. For example, instead of one large DataAccessInterface, you might have UserReaderInterface and UserWriterInterface.
+- Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., interfaces). Abstractions should not depend on details. Details should depend on abstractions.
+- Dependency Injection (DI): This is key. Instead of a controller creating its own service instance ($userService = new UserService();), the service (or its interface) is "injected" into the controller, typically via its constructor. This makes your code more modular, testable, and flexible. DI containers can automate this process.

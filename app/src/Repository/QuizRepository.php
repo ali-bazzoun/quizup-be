@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../models/Quiz.php';
+require_once __DIR__ . '/../Model/Quiz.php';
 require_once __DIR__ . '/BaseRepository.php';
 require_once __DIR__ . '/QuestionRepository.php';
 

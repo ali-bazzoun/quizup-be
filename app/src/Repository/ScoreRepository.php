@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../models/Score.php';
+require_once __DIR__ . '/../Model/Score.php';
 require_once __DIR__ . '/BaseRepository.php';
 
 class ScoreRepository extends BaseRepository

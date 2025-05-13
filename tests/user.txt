@@ -1,0 +1,144 @@
+
+1:
+{
+  "email": "emma.jones@example.com",
+  "password": "Str0ngP@ss!" // ✅ Valid
+}
+
+2:
+{
+  "email": "oliver.wilson@example.com",
+  "password": "" // ❌ Invalid: empty password
+}
+
+3:
+{
+  "email": "ava.taylor@example.com",
+  "password": "password" // ❌ Invalid: too common/weak !!!!!!
+}
+
+4:
+{
+  "email": "liam_brown@example.com",
+  "password": "Complex123$" // ✅ Valid
+}
+
+5:
+{
+  "email": "isabella.davis@example.com",
+  "password": "short1!" // ❌ Invalid: too short
+}
+
+6:
+{
+  "email": "sophia.evans@@example.com",
+  "password": "ValidP@ss123" // ❌ Invalid: malformed email
+}
+
+7:
+{
+  "email": "jack.miller@.com",
+  "password": "SecurePass12#" // ❌ Invalid: bad domain
+}
+
+8:
+{
+  "email": "charlie.moore@example.com",
+  "password": "Another$Pass123" // ✅ Valid
+}
+
+9:
+{
+  "email": "",
+  "password": "Valid123@" // ❌ Invalid: empty email
+}
+
+10:
+{
+  "email": "noah.walker@example.com",
+  "password": "      " // ❌ Invalid: password is all whitespace !!!!!!!
+}
+
+11:
+{
+  "email": "ethan.hall@example.com",
+  "password": "VeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongPassword123!" // ❌ Invalid: password too long
+}
+
+12:
+{
+  "email": "lucas.adams@example.com",
+  "password": "NoSpecialChar123" // ❌ Invalid: missing special character
+}
+
+13:
+{
+  "email": "mia.harris@example.com",
+  "password": "NO_LOWERCASE123!" // ❌ Invalid: all uppercase
+}
+
+14:
+{
+  "email": "zoe.clark@example.com",
+  "password": "no_uppercase123!" // ❌ Invalid: all lowercase
+}
+
+15:
+{
+  "email": "sam.thomas@example.com",
+  "password": "Proper1!" // ✅ Valid
+}
+
+16:
+{
+  "email": "sql.inject@example.com",
+  "password": "'; DROP TABLE users; --" // ❌ Invalid: SQL injection pattern !!!!!!!!
+}
+
+17:
+{
+  "email": "white.space@example.com ",
+  "password": "ValidPass123!" // ❌ Invalid: trailing whitespace
+}
+
+18:
+{
+  "email": "duplicate@example.com",
+  "password": "Valid123!" // ✅ Valid
+}
+
+19:
+{
+  "email": "duplicate@example.com",
+  "password": "AnotherValid123@" // ❌ Invalid: duplicate email
+}
+
+20:
+{
+  "email": "   ",
+  "password": "ValidPass123!" // ❌ Invalid: email is whitespace only
+}
+
+21:
+{
+  "email": "valid.alllowercase@example.com",
+  "password": "StrongP@ss456!" // ✅ Valid (email is all lowercase, which is allowed)
+}
+
+22:
+{
+  "email": "averyaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryaveryavery@example.com",
+  "password": "StrongPass123!" // ❌ Invalid: email too long (over 254 chars)
+}
+
+23:
+{
+  "email": "jayden.long@example.com",
+  "password": "Short1!" // ❌ Invalid: under 8 chars
+}
+
+24:
+{
+  "email": "brooklyn.fox@example.com",
+  "password": "This1Is2Strong!" // ✅ Valid
+}

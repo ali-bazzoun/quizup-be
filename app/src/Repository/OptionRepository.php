@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../models/Option.php';
+require_once __DIR__ . '/../Model/Option.php';
 require_once __DIR__ . '/BaseRepository.php';
 
 class OptionRepository extends BaseRepository

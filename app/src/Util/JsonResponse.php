@@ -4,9 +4,7 @@ class JsonResponse
 {
     public static function success($data = null, ?string $message = null, int $status_code = 200, array $meta = null)
     {
-        $response = [
-            'status' => 'success'
-        ];
+        $response = ['status' => 'success'];
         if ($data !== null)
         {
             $response['data'] = $data;
@@ -24,9 +22,7 @@ class JsonResponse
     
     public static function error(?string $message = null, int $status_code = 400, $errors = null, array $meta = null)
     {
-        $response = [
-            'status' => 'error'
-        ];
+        $response = ['status' => 'error'];
         if ($message !== null)
         {
             $response['message'] = $message;
