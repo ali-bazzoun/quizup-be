@@ -1,72 +1,65 @@
 <?php
 
 require_once __DIR__ . '/../src/Database/Setup.php';
+require_once __DIR__ . '/../src/Controller/QuizController.php';
+require_once __DIR__ . '/../src/Controller/QuestionController.php';
+require_once __DIR__ . '/../src/Controller/AuthController.php';
+require_once __DIR__ . '/../src/Util/JsonResponse.php';
 
 setup_database();
 
-if ($_SERVER['REQUEST_URI'] === '/')
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+function json_request_body(): array
+{
+    return json_decode(file_get_contents('php://input'), true) ?? [];
+}
+
+// Home
+if ($uri === '/')
 {
     echo "<h1>Welcome to QuizUp!</h1>";
     echo "<p>If you're looking for the API, head over to <strong>/quizup/api</strong> routes.</p>";
     exit;
 }
 
-require_once __DIR__ . '/../src/Controller/QuizController.php';
-require_once __DIR__ . '/../src/Controller/QuestionController.php';
-require_once __DIR__ . '/../src/Controller/AuthController.php';
-require_once __DIR__ . '/../src/Util/JsonResponse.php';
+// Auth Routes
+else if ($uri === '/quizup/api/auth/login' && $method === 'POST')
+    (new AuthController())->login(json_request_body());
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$method = $_SERVER['REQUEST_METHOD'];
+else if ($uri === '/quizup/api/auth/register' && $method === 'POST')
+    (new AuthController())->register(json_request_body());
 
-switch (true)
+// Quiz Routes
+else if ($uri === '/quizup/api/quizzes' && $method === 'GET')
+    (new QuizController())->get_quizzes();
+
+else if ($uri === '/quizup/api/quizzes' && $method === 'POST')
+    (new QuizController())->create_quiz(json_request_body());
+
+else if (preg_match('#^/quizup/api/quiz/(\d+)$#', $uri, $match) && $method === 'PUT')
+    (new QuestionController())->edit_question((int) $match[1], json_request_body());
+
+else if (preg_match('#^/quizup/api/quizzes/(\d+)$#', $uri, $match) && $method === 'DELETE')
+    (new QuizController())->delete_quiz((int) $match[1]);
+
+// Question Routes
+else if ($uri === '/quizup/api/questions' && $method === 'GET')
 {
-    case preg_match('#^/quizup/api/auth/login$#', $uri):
-        (new AuthController())->login(json_request_body());
-        break;
-
-    case preg_match('#^/quizup/api/auth/register$#', $uri):
-        (new AuthController())->register(json_request_body());
-        break;
-
-    case $uri === '/quizup/api/quizzes' && $method === 'GET':
-        (new QuizController())->get_quizzes();
-        break;
-
-    case $uri === '/quizup/api/quizzes' && $method === 'POST':
-        (new QuizController())->create_quiz();
-        break;
-
-    case $uri === '/quizup/api/quizzes' && $method === 'PUT':
-        (new QuizController())->get_quizzes(json_request_body());
-        break;
-
-    case preg_match('#^/quizup/api/quizzes/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
-        (new QuizController())->delete_quiz((int)$id_match[1]);
-        break;
-
-    case $uri === '/quizup/api/questions' && $method === 'GET':
-        (new QuestionController())->get_questions();
-        break;
-
-    case $uri === '/quizup/api/questions' && $method === 'POST':
-        (new QuestionController())->create_question();
-        break;
-    
-    case $uri === '/quizup/api/questions' && $method === 'PUT':
-        (new QuestionController())->edit_question(json_request_body());
-        break;
-
-    case preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $id_match) && $method === 'DELETE':
-        (new QuestionController())->delete_question((int)$id_match[1]);
-        break;
-
-    default:
-        JsonResponse::error('Route not found', 404);
-        break;
+    $quiz_id = isset($_GET['quiz_id']) ? (int)$_GET['quiz_id'] : null;
+    (new QuestionController())->get_questions($quiz_id);
 }
 
-function json_request_body(): array
-{
-    return json_decode(file_get_contents('php://input'), true) ?? [];
-}
+else if ($uri === '/quizup/api/questions' && $method === 'POST')
+    (new QuestionController())->create_question();
+
+else if (preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $match) && $method === 'PUT')
+    (new QuestionController())->edit_question((int) $match[1], json_request_body());
+
+else if (preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $match) && $method === 'DELETE')
+    (new QuestionController())->delete_question((int) $match[1]);
+
+// Not Found
+else
+    JsonResponse::error('Route not found', 404);

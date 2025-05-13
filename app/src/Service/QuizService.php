@@ -20,11 +20,6 @@ class QuizService
 
 	public function create_quiz(array $data): bool
 	{
-		if (empty($data['title']))
-		{
-			log_error("Quiz title is required.");
-			return false;
-		}
 		$this->db->beginTransaction();
 		try
 		{
@@ -61,9 +56,8 @@ class QuizService
 		return $valid_quizzes;
 	}
 
-	public function edit_quiz(array $data): bool
+	public function edit_quiz(int $id, array $data): bool
     {
-		$id = $data['id'];
 		if (!$this->quiz_repo->exists($id))
 		{
 			log_error("Quiz with ID $id does not exist.");

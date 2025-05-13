@@ -64,9 +64,8 @@ class QuestionService
 		return $valid_questions;
 	}
 
-	public function edit_question($data): bool
+	public function edit_question(int $id, array $data): bool
 	{
-		$id = $data['id'];
 		if (!$this->question_repo->exists($id))
 		{
 			log_error("Question with ID $id does not exist.");
