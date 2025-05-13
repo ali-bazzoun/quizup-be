@@ -4,7 +4,7 @@ require_once __DIR__ . '/../Service/AuthService.php';
 require_once __DIR__ . '/../Util/RegisterValidator.php';
 require_once __DIR__ . '/../Util/LoginValidator.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
-require_once __DIR__ . '/../Util/logging.php';
+require_once __DIR__ . '/../Util/Logging.php';
 
 class AuthController
 {

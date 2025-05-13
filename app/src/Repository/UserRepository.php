@@ -62,22 +62,27 @@ class UserRepository
 
     protected function execute_query(string $sql, array $params = [], string $resultType = 'row_count')
     {
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-
-        switch ($resultType)
+        try
         {
-            case 'fetch': 
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
 
-            case 'fetch_all':
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            switch ($resultType)
+            {
+                case 'fetch': 
+                    return $stmt->fetch(PDO::FETCH_ASSOC);
 
-            case 'row_count':
-                return $stmt->rowCount();
+                case 'fetch_all':
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            default:
-                throw new InvalidArgumentException("Invalid result type specified.");
+                case 'row_count':
+                    return $stmt->rowCount();
+
+                default:
+                    throw new InvalidArgumentException("Invalid result type specified.");
+            }
         }
+        catch (PDOException as $e)
+            log_error("Database query failed: $sql", 'ERROR', $e);
     }
 }

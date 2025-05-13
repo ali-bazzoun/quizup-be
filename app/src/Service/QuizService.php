@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Repository/QuizRepository.php';
 require_once __DIR__ . '/QuestionService.php';
-require_once __DIR__ . '/../Util/logging.php';
+require_once __DIR__ . '/../Util/Logging.php';
 
 class QuizService
 {

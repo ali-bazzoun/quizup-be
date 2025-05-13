@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Repository/QuizRepository.php';
 require_once __DIR__ . '/../Repository/QuestionRepository.php';
 require_once __DIR__ . '/../Repository/OptionRepository.php';
-require_once __DIR__ . '/../Util/logging.php';
+require_once __DIR__ . '/../Util/Logging.php';
 
 class QuestionService
 {

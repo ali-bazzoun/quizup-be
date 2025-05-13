@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../Service/QuestionService.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
-require_once __DIR__ . '/../Util/normalizer.php';
+require_once __DIR__ . '/../Util/Normalizer.php';
 
 class QuestionController
 {

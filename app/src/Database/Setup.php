@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../config/database.php';
-require_once __DIR__ . '/../Util/logging.php';
+require_once __DIR__ . '/../Util/Logging.php';
 
 function setup_database()
 {
