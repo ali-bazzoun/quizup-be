@@ -5,22 +5,21 @@ function log_error(string $message, string $level = 'ERROR', ?Throwable $excepti
     $timestamp = date('Y-m-d H:i:s');
     $log_line = "[$timestamp] [$level] $message";
 
-    if ($exception) {
-        $log_line .= ' | ' . $exception->getMessage() .
-                     ' in ' . $exception->getFile() .
-                     ':' . $exception->getLine();
+    if ($exception)
+    {
+        $log_line .=    ' | '  . $exception->getMessage()  .
+                        ' in ' . $exception->getFile()     .
+                        ':'    . $exception->getLine();
     }
 
     $log_line .= "\n";
 
-    // Log to STDERR (console) if defined, otherwise log to PHP error log
     if (defined('STDERR'))
     {
         fwrite(STDERR, $log_line);
     }
     else
     {
-        error_log($log_line); // Logs to the default PHP error log
+        error_log($log_line);
     }
 }
-?>

@@ -8,7 +8,10 @@ require_once __DIR__ . '/../utils/logging.php';
 
 class QuestionService
 {
-	private QuestionRepository $repo;
+	private \PDO $db;
+	private QuizRepository $quiz_repo;
+	private OptionRepository $option_repo;
+	private QuestionRepository $question_repo;
 
 	public function __construct()
 	{
@@ -21,7 +24,7 @@ class QuestionService
 	public function create_question(array $data): bool
 	{
 		$quiz_id = $data['quiz_id'];
-		if (!$this->quiz_repo->exist($quiz_id))
+		if (!$this->quiz_repo->exists($quiz_id))
 		{
 			log_error("Quiz with ID $quiz_id does not exist.");
 			return false;
@@ -51,7 +54,7 @@ class QuestionService
 		}
 	}
 
-	public get_valid_questions(int $quiz_id)
+	public function get_valid_questions(int $quiz_id)
 	{
 		$questions =  $this->question_repo->all_by_quiz_id_with_options($quiz_id);
 		$valid_questions = [];
@@ -70,19 +73,19 @@ class QuestionService
 		$id = $data['id'];
 		if (!$this->question_repo->exists($id))
 		{
-			log_error("Question with ID $id does not exist.")
+			log_error("Question with ID $id does not exist.");
 			return false;
 		}
-		$this->question_repo->update($id, $data);
+		return $this->question_repo->update($id, $data);
 	}
 
-	public function delete_question(int $question_id): bool
+	public function delete_question(int $id): bool
 	{
 		if (!$this->quiz_repo->exists($id))
 		{
-			log_error("Question with ID $qid does not exist.")
+			log_error("Question with ID $id does not exist.");
 			return false;
 		}
-		return $this->question_repo->delete($question_id);
+		return $this->question_repo->delete($id);
 	}
 }

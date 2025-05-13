@@ -16,7 +16,8 @@ if (!$request || !isset($request['email']) || !isset($request['password']))
 $errors = LoginValidator::validate($request);
 if ($errors)
 {
-    JsonResponse::error('Invalid input', 422, ['errors' => $errors]);
+    log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+    JsonResponse::error('Invalid input', 422);
     exit;
 }
 
@@ -34,5 +35,6 @@ try
 }
 catch (\Exception $e)
 {
+    log_error("Exception caught during logging in", 'ERROR', $e);
     JsonResponse::error('Unexpected error', 500);
 }

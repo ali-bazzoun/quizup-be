@@ -27,10 +27,11 @@ try
             {
                 JsonResponse::error('Create failed', 400);
             }
+            break;
 
         case 'PUT':
             $data = json_decode(file_get_contents('php://input'), true);
-            if ($data && $quiz_service->update_quiz(($data))
+            if ($data && $quiz_service->update_quiz($data))
 			{
                 JsonResponse::success(null, 'Quiz updated successfully');
             }
@@ -42,7 +43,7 @@ try
 
         case 'DELETE':
             $id = $_GET['id'] ?? null;            
-            if ($id && $quiz_service->deleteQuiz((int)$id))
+            if ($id && $quiz_service->delete_quiz((int)$id))
 			{
                 JsonResponse::success(null, 'Quiz deleted successfully');
             }

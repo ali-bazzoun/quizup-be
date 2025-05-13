@@ -103,7 +103,7 @@ class QuizService
 		$id = $data['id'];
 		if (!$this->quiz_repo->exists($id))
 		{
-			log_error("Quiz with ID $id does not exist.")
+			log_error("Quiz with ID $id does not exist.");
 			return false;
 		}
         return $this->quiz_repo->update($id, $data);
@@ -113,7 +113,7 @@ class QuizService
     {
 		if (!$this->quiz_repo->exists($id))
 		{
-			log_error("Quiz with ID $id does not exist.")
+			log_error("Quiz with ID $id does not exist.");
 			return false;
 		}
         return $this->quiz_repo->delete($id);

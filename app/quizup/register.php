@@ -17,8 +17,8 @@ if (!$request || !isset($request['email']) || !isset($request['password']))
 $errors = RegisterValidator::validate($request);
 if ($errors)
 {
-    JsonResponse::error('Invalid input', 422);
     log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+    JsonResponse::error('Invalid input', 422);
     exit;
 }
 
@@ -36,5 +36,6 @@ try
 }
 catch (\Exception $e)
 {
+    log_error("Exception caught during registration", 'ERROR', $e);
     JsonResponse::error('Unexpected error', 500);
 }
