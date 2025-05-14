@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../Service/QuizService.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
+require_once __DIR__ . '/../Util/QuizValidator.php';
 require_once __DIR__ . '/../Util/Normalizer.php';
 
 class QuizController
@@ -21,18 +22,15 @@ class QuizController
 
     public function create_quiz(array $data): void
     {
-        if (empty($data))
+        $errors = QuizValidator::validate_create_data($data);
+        if ($errors)
         {
-            JsonResponse::error("Request body is empty", 400);
-            return ;
-        }
-        if (empty($data['title']))
-        {
-            JsonResponse::error("title is empty", 400);
+            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+            JsonResponse::error('Invalid input', 422);
             return ;
         }
         $data = normalize_create_quiz_data($data);
-        if ($data && $this->quiz_service->create_quiz($data))
+        if ($this->quiz_service->create_quiz($data))
             JsonResponse::success(null, 'Quiz created successfully');
         else
             JsonResponse::error('Create failed', 400);
@@ -40,12 +38,19 @@ class QuizController
 
     public function edit_quiz(?int $id, array $data): void
     {
-        if (empty($data) || !$id)
+        if (!$id)
         {
-            JsonResponse::error("Request body is empty or ID is missing", 400);
+            JsonResponse::error("ID is missing", 400);
             return ;
         }
-        if ($data && $this->quiz_service->edit_quiz($data))
+        $errors = QuizValidator::validate_update_data($data);
+        if ($errors)
+        {
+            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+            JsonResponse::error('Invalid input', 422);
+            return ;
+        }
+        if ($this->quiz_service->edit_quiz($data))
             JsonResponse::success(null, 'Quiz updated successfully');
         else
             JsonResponse::error('Update failed', 400);

@@ -82,7 +82,9 @@ class UserRepository
                     throw new InvalidArgumentException("Invalid result type specified.");
             }
         }
-        catch (PDOException as $e)
+        catch (Throwable $e)
+        {
             log_error("Database query failed: $sql", 'ERROR', $e);
+        }
     }
 }

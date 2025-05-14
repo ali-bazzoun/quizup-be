@@ -20,13 +20,13 @@ class AuthController
         if (!isset($request['email'], $request['password']))
         {
             JsonResponse::error('Invalid request format', 400);
-            return;
+            return ;
         }
         $errors = RegisterValidator::validate($request);
         if ($errors)
         {
-            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
             JsonResponse::error('Invalid input', 422);
+            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
             return;
         }
         try
@@ -34,15 +34,15 @@ class AuthController
             $user = $this->auth_service->attempt_register($request['email'], $request['password']);
             if (!$user)
             {
-                JsonResponse::error('Invalid credentials', 401);
-                return;
+                JsonResponse::error('Registration failed');
+                return ;
             }
             JsonResponse::success(['user' => $user], 'Register successful');
         }
         catch (\Exception $e)
         {
-            log_error("Exception caught during registration", 'ERROR', $e);
             JsonResponse::error('Unexpected error', 500);
+            // log_error("Exception caught during registration", 'ERROR', $e);
         }
     }
 
@@ -51,14 +51,14 @@ class AuthController
         if (!isset($request['email'], $request['password']))
         {
             JsonResponse::error('Invalid request format', 400);
-            return;
+            return ;
         }
         $errors = LoginValidator::validate($request);
         if ($errors)
         {
             log_error("Validation failed: " . print_r($errors, true), 'ERROR');
             JsonResponse::error('Invalid input', 422);
-            return;
+            return ;
         }
         try
         {
@@ -66,7 +66,7 @@ class AuthController
             if (!$user)
             {
                 JsonResponse::error('Invalid credentials', 401);
-                return;
+                return ;
             }
             JsonResponse::success(['user' => $user], 'Login successful');
         }

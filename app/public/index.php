@@ -20,44 +20,44 @@ function json_request_body(): array
 if ($uri === '/')
 {
     echo "<h1>Welcome to QuizUp!</h1>";
-    echo "<p>If you're looking for the API, head over to <strong>/quizup/api</strong> routes.</p>";
+    echo "<p>If you're looking for the API, head over to <strong>/api</strong> routes.</p>";
     exit;
 }
 
 // Auth Routes
-else if ($uri === '/quizup/api/auth/login' && $method === 'POST')
+elseif ($uri === '/api/auth/login' && $method === 'POST')
     (new AuthController())->login(json_request_body());
 
-else if ($uri === '/quizup/api/auth/register' && $method === 'POST')
+elseif ($uri === '/api/auth/register' && $method === 'POST')
     (new AuthController())->register(json_request_body());
 
 // Quiz Routes
-else if ($uri === '/quizup/api/quizzes' && $method === 'GET')
+elseif ($uri === '/api/quizzes' && $method === 'GET')
     (new QuizController())->get_quizzes();
 
-else if ($uri === '/quizup/api/quizzes' && $method === 'POST')
+elseif ($uri === '/api/quizzes' && $method === 'POST')
     (new QuizController())->create_quiz(json_request_body());
 
-else if (preg_match('#^/quizup/api/quiz/(\d+)$#', $uri, $match) && $method === 'PUT')
+elseif (preg_match('#^/api/quiz/(\d+)$#', $uri, $match) && $method === 'PUT')
     (new QuestionController())->edit_question((int) $match[1], json_request_body());
 
-else if (preg_match('#^/quizup/api/quizzes/(\d+)$#', $uri, $match) && $method === 'DELETE')
+elseif (preg_match('#^/api/quizzes/(\d+)$#', $uri, $match) && $method === 'DELETE')
     (new QuizController())->delete_quiz((int) $match[1]);
 
 // Question Routes
-else if ($uri === '/quizup/api/questions' && $method === 'GET')
+elseif ($uri === '/api/questions' && $method === 'GET')
 {
     $quiz_id = isset($_GET['quiz_id']) ? (int)$_GET['quiz_id'] : null;
     (new QuestionController())->get_questions($quiz_id);
 }
 
-else if ($uri === '/quizup/api/questions' && $method === 'POST')
+elseif ($uri === '/api/questions' && $method === 'POST')
     (new QuestionController())->create_question();
 
-else if (preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $match) && $method === 'PUT')
+elseif (preg_match('#^/api/questions/(\d+)$#', $uri, $match) && $method === 'PUT')
     (new QuestionController())->edit_question((int) $match[1], json_request_body());
 
-else if (preg_match('#^/quizup/api/questions/(\d+)$#', $uri, $match) && $method === 'DELETE')
+elseif (preg_match('#^/api/questions/(\d+)$#', $uri, $match) && $method === 'DELETE')
     (new QuestionController())->delete_question((int) $match[1]);
 
 // Not Found

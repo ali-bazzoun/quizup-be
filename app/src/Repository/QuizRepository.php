@@ -15,6 +15,13 @@ class QuizRepository extends BaseRepository
         $this->question_repo = new QuestionRepository();
     }
 
+    public function exists_by_title(string $title): bool
+    {
+        $sql = "SELECT 1 FROM `{$this->table}` WHERE title = :title LIMIT 1";
+        $result = $this->execute_query($sql, ['title' => $title], 'fetch');
+        return $result !== false;
+    }
+
     public function all_with_questions_and_options(): array
     {
         $quizzes = $this->all();

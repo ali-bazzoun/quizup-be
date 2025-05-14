@@ -34,7 +34,7 @@ function setup_database()
             id INT AUTO_INCREMENT PRIMARY KEY,
             question_id INT NOT NULL,
             text VARCHAR(255) NOT NULL,
-            is_correct BOOLEAN,
+            is_correct BOOLEAN NOT NULL,
             FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
         )",
 
@@ -59,7 +59,9 @@ function setup_database()
             else 
                 $pdo->exec($sql);
         } 
-        catch (PDOException $e) 
+        catch (PDOException $e)
+        {
             log_error("Failed to process table $name: " . $e->getMessage());
+        }
     }
 }

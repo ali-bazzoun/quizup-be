@@ -36,7 +36,9 @@ abstract class BaseRepository
     {
         $sql = "SELECT * FROM `{$this->table}`";
         $rows = $this->execute_query($sql, [], 'fetch_all');
-        return array_map(fn(array $data) => new $this->model_class($data), $rows);
+        if (!is_array($rows))
+            $rows = [];
+        return array_map(fn($data) => new $this->model_class($data), $rows);
     }
 
     public function create(array $data): ?object
@@ -117,7 +119,10 @@ abstract class BaseRepository
                     throw new InvalidArgumentException("Invalid result type specified.");
             }
         }
-        catch (PDOException as $e)
+        catch (Exception $e)
+        {
             log_error("Database query failed: $sql", 'ERROR', $e);
+            throw $e;
+        }
     }
 }

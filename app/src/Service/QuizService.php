@@ -20,6 +20,11 @@ class QuizService
 
 	public function create_quiz(array $data): bool
 	{
+		if ($this->quiz_repo->exists_by_title($data['title']))
+		{
+			log_error("Title already exists.");
+			return false;
+		}
 		$this->db->beginTransaction();
 		try
 		{
