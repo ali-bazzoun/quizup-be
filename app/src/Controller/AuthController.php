@@ -4,6 +4,7 @@ require_once __DIR__ . '/../Service/AuthService.php';
 require_once __DIR__ . '/../Util/RegisterValidator.php';
 require_once __DIR__ . '/../Util/LoginValidator.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
+require_once __DIR__ . '/../Exception/RegisterExistedEmailException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
 class AuthController
@@ -38,6 +39,11 @@ class AuthController
                 return ;
             }
             JsonResponse::success(['user' => $user], 'Register successful');
+        }
+        catch (RegisterExistedEmailException $e)
+        {
+            JsonResponse::error("Registered email.", 400);
+            return ;
         }
         catch (\Exception $e)
         {

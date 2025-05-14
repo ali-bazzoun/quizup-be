@@ -4,7 +4,7 @@ require_once __DIR__ . '/../Model/User.php';
 require_once __DIR__ . '/../Model/UserDTO.php';
 require_once __DIR__ . '/../Repository/UserRepository.php';
 require_once __DIR__ . '/../Util/RegisterValidator.php';
-require_once __DIR__ . '/../Exception/RegisterExistedEmailEXception.php';
+require_once __DIR__ . '/../Exception/RegisterExistedEmailException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
 class AuthService
