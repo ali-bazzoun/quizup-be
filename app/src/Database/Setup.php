@@ -51,17 +51,10 @@ function setup_database()
 
     foreach ($tables as $name => $sql)
     {
-        try 
-        {
-            $stmt = $pdo->query("SHOW TABLES LIKE '$name'");
-            if ($stmt->rowCount() > 0) 
-                $done = 1;
-            else 
-                $pdo->exec($sql);
-        } 
-        catch (PDOException $e)
-        {
-            log_error("Failed to process table $name: " . $e->getMessage());
-        }
+        $stmt = $pdo->query("SHOW TABLES LIKE '$name'");
+        if ($stmt->rowCount() > 0) 
+            $done = 1;
+        else 
+            $pdo->exec($sql);
     }
 }

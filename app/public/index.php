@@ -5,7 +5,10 @@ require_once __DIR__ . '/../src/Controller/QuizController.php';
 require_once __DIR__ . '/../src/Controller/QuestionController.php';
 require_once __DIR__ . '/../src/Controller/AuthController.php';
 require_once __DIR__ . '/../src/Util/JsonResponse.php';
+require_once __DIR__ . '/../src/Util/Logging.php';
 
+ini_set('display_errors', 0);
+set_error_handler('error_handler');
 setup_database();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -52,7 +55,7 @@ elseif ($uri === '/api/questions' && $method === 'GET')
 }
 
 elseif ($uri === '/api/questions' && $method === 'POST')
-    (new QuestionController())->create_question();
+    (new QuestionController())->create_question(json_request_body());
 
 elseif (preg_match('#^/api/questions/(\d+)$#', $uri, $match) && $method === 'PUT')
     (new QuestionController())->edit_question((int) $match[1], json_request_body());

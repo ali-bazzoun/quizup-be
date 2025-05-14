@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../Exception/DatabaseQueryException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
 abstract class BaseRepository
@@ -12,10 +13,10 @@ abstract class BaseRepository
 
     public function __construct(string $table, string $model_class, array $fillable)
     {
-        $this->db = Database::get_connection();
-        $this->table = $table;
-        $this->model_class = $model_class;
-        $this->fillable = $fillable;
+        $this->db           = Database::get_connection();
+        $this->table        = $table;
+        $this->model_class  = $model_class;
+        $this->fillable     = $fillable;
     }
 
     public function find(int $id): ?object
@@ -37,17 +38,12 @@ abstract class BaseRepository
         $sql = "SELECT * FROM `{$this->table}`";
         $rows = $this->execute_query($sql, [], 'fetch_all');
         if (!is_array($rows))
-            $rows = [];
+            return [];
         return array_map(fn($data) => new $this->model_class($data), $rows);
     }
 
     public function create(array $data): ?object
     {
-        if (empty($data))
-		{
-            log_error("Data array cannot be empty.");
-            throw new InvalidArgumentException("Data array cannot be empty.");
-        }
         $data = $this->filter_allowed_data($data);
         $columns = array_keys($data);
         $placeholders = array_map(fn($col) => ':' . $col, $columns);
@@ -64,11 +60,6 @@ abstract class BaseRepository
 
     public function update(int $id, array $data): bool
     {
-        if (empty($data))
-		{
-            log_error("Data array cannot be empty.");
-            throw new InvalidArgumentException("Data array cannot be empty.");
-        }
         $data = $this->filter_allowed_data($data);
         $set_clauses = array_map(fn($col) => "`$col` = :$col", array_keys($data));
         $sql = sprintf(
@@ -116,13 +107,14 @@ abstract class BaseRepository
                     return $stmt->rowCount();
 
                 default:
+                    error_handler('Error', "Invalid result type: $resultType", __FILE__, __LINE__);
                     throw new InvalidArgumentException("Invalid result type specified.");
             }
         }
-        catch (Exception $e)
+        catch (PDOException $e)
         {
-            log_error("Database query failed: $sql", 'ERROR', $e);
-            throw $e;
+            error_handler('Error', $e->getMessage(), $e->getFile(), $e->getLine());
+            throw new DatabaseQueryException("Database query failed", 0, $e);
         }
     }
 }

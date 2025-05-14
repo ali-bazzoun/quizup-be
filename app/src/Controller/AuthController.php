@@ -26,7 +26,7 @@ class AuthController
         if ($errors)
         {
             JsonResponse::error('Invalid input', 422);
-            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+            error_handler('Exception', "Validation failed: " . print_r($errors, true), __FILE__, __LINE__);
             return;
         }
         try
@@ -41,8 +41,8 @@ class AuthController
         }
         catch (\Exception $e)
         {
+            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
             JsonResponse::error('Unexpected error', 500);
-            // log_error("Exception caught during registration", 'ERROR', $e);
         }
     }
 
@@ -56,7 +56,7 @@ class AuthController
         $errors = LoginValidator::validate($request);
         if ($errors)
         {
-            log_error("Validation failed: " . print_r($errors, true), 'ERROR');
+            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
             JsonResponse::error('Invalid input', 422);
             return ;
         }
@@ -72,7 +72,7 @@ class AuthController
         }
         catch (\Exception $e)
         {
-            log_error("Exception caught during login", 'ERROR', $e);
+            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
             JsonResponse::error('Unexpected error', 500);
         }
     }

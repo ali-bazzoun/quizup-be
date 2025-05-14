@@ -1,25 +1,13 @@
 <?php
 
-function log_error(string $message, string $level = 'ERROR', ?Throwable $exception = null): void 
+function error_handler(string $level, string $message, string $file, string $line)
 {
     $timestamp = date('Y-m-d H:i:s');
-    $log_line = "[$timestamp] [$level] $message";
-
-    if ($exception)
-    {
-        $log_line .=    ' | '  . $exception->getMessage()  .
-                        ' in ' . $exception->getFile()     .
-                        ':'    . $exception->getLine();
-    }
-
-    $log_line .= "\n";
-
-    if (defined('STDERR'))
-    {
-        fwrite(STDERR, $log_line);
-    }
-    else
-    {
-        error_log($log_line);
-    }
+    $error =    "[$timestamp] level: $level"        .PHP_EOL;
+    $error .=   "[$timestamp] message: $message"    .PHP_EOL;
+    $error .=   "[$timestamp] file: $file"          .PHP_EOL;
+    $error .=   "[$timestamp] line: $line"          .PHP_EOL;
+    $error .=   "---------------------------------";.PHP_EOL;
+    error_log($error, 0);
+    // error_log($error, 3, 'php://stderr');
 }

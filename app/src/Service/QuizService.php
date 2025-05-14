@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Repository/QuizRepository.php';
 require_once __DIR__ . '/QuestionService.php';
+require_once __DIR__ . '/../Exception/DuplicateQuizTitleException.php';
+require_once __DIR__ . '/../Exception/IdNotExistException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
 class QuizService
@@ -13,17 +15,17 @@ class QuizService
 
 	public function __construct()
 	{
-        $this->db = Database::get_connection();
-		$this->question_service = new QuestionService();
-		$this->quiz_repo = new QuizRepository();
+        $this->db 				= Database::get_connection();
+		$this->question_service	= new QuestionService();
+		$this->quiz_repo 		= new QuizRepository();
 	}
 
 	public function create_quiz(array $data): bool
 	{
 		if ($this->quiz_repo->exists_by_title($data['title']))
 		{
-			log_error("Title already exists.");
-			return false;
+			error_handler('Exception', "Quiz title '{$data['title']}' already exists.", __FILE__, __LINE__);
+			throw new DuplicateQuizTitleException("Quiz title '{$data['title']}' already exists.");
 		}
 		$this->db->beginTransaction();
 		try
@@ -40,44 +42,68 @@ class QuizService
 		catch (\Throwable $e)
 		{
 			$this->db->rollBack();
-			log_error("Failed to create quiz (rolling back).", 'CRITICAL', $e);
-			return false;
+			error_handler('Error', "Failed to create quiz (rolling back).", __FILE__, __LINE__);
+			throw $e;
 		}
 	}
 
 	public function get_valid_quizzes(): array
 	{
-		$all_quizzes = $this->quiz_repo->all();
-		$valid_quizzes = [];
-		foreach ($all_quizzes as $quiz)
+		try
 		{
-			$questions = $this->question_service->get_valid_questions($quiz->id);
-			if (count($questions) > 2)
+			$valid_quizzes = [];
+			$all_quizzes = $this->quiz_repo->all();
+			foreach ($all_quizzes as $quiz)
 			{
-				$quiz->questions = $questions;
-				$valid_quizzes[] = $quiz;
+				$questions = $this->question_service->get_valid_questions($quiz->id);
+				if (count($questions) > 2)
+				{
+					$quiz->questions = $questions;
+					$valid_quizzes[] = $quiz;
+				}
 			}
+			return $valid_quizzes;			
 		}
-		return $valid_quizzes;
+		catch (\Throwable $e)
+		{
+			error_handler('Error', "Get valid quizzes failed (service).", __FILE__, __LINE__);
+			throw $e;
+		}
 	}
 
 	public function edit_quiz(int $id, array $data): bool
     {
 		if (!$this->quiz_repo->exists($id))
 		{
-			log_error("Quiz with ID $id does not exist.");
-			return false;
+			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
+			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-        return $this->quiz_repo->update($id, $data);
+		try
+		{
+			return $this->quiz_repo->update($id, $data);
+		}
+		catch (\Throwable $e)
+		{
+			error_handler('Error', "Quiz update failed (service).", __FILE__, __LINE__);
+			throw $e;
+		}
     }
 
     public function delete_quiz(int $id): bool
     {
 		if (!$this->quiz_repo->exists($id))
 		{
-			log_error("Quiz with ID $id does not exist.");
-			return false;
+			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
+			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-        return $this->quiz_repo->delete($id);
+		try
+		{
+        	return $this->quiz_repo->delete($id);
+		}
+		catch (\Throwable $e)
+		{
+			error_handler('Error', "Quiz delete failed (service).", __FILE__, __LINE__);
+			throw $e;
+		}
     }
 }
