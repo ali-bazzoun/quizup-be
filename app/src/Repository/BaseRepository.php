@@ -9,14 +9,16 @@ abstract class BaseRepository
     protected \PDO 		$pdo;
 	protected string	$table;
     protected string	$model_class;
-    protected array     $fillable;
+    protected array     $creatable;
+    protected array     $updatable;
 
-    public function __construct(string $table, string $model_class, array $fillable)
+    public function __construct(string $table, string $model_class, array $field_config = [])
     {
-        $this->pdo           = Database::get_connection();
+        $this->pdo          = Database::get_connection();
         $this->table        = $table;
         $this->model_class  = $model_class;
-        $this->fillable     = $fillable;
+        $this->creatable    = $field_config['create'] ?? [];
+        $this->updatable    = $field_config['update'] ?? [];
     }
 
     public function find(int $id): ?object
@@ -44,7 +46,7 @@ abstract class BaseRepository
 
     public function create(array $data): ?object
     {
-        $data = $this->filter_allowed_data($data);
+        $data = $this->filter_allowed_data($data, $this->creatable);
         $columns = array_keys($data);
         $placeholders = array_map(fn($col) => ':' . $col, $columns);
         $sql = sprintf(
@@ -60,7 +62,7 @@ abstract class BaseRepository
 
     public function update(int $id, array $data): bool
     {
-        $data = $this->filter_allowed_data($data);
+        $data = $this->filter_allowed_data($data, $this->updatable);
         $set_clauses = array_map(fn($col) => "`$col` = :$col", array_keys($data));
         $sql = sprintf(
             "UPDATE `%s` SET %s WHERE id = :id",
@@ -80,11 +82,11 @@ abstract class BaseRepository
         return $affected_rows > 0;
     }
 
-    protected function filter_allowed_data(array $data): array
+    protected function filter_allowed_data(array $allowed_fields): array
     {
         $filtered_data = [];
         foreach($data as $key => $value)
-            if (in_array($key, $this->fillable))
+            if (in_array($key, $this->allowed_fields))
                 $filtered_data[$key] = $value;
         return $filtered_data;
     }

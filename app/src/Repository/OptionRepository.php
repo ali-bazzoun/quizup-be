@@ -7,8 +7,9 @@ class OptionRepository extends BaseRepository
 {
     public function __construct()
     {
-        $fillable = ['question_id', 'text', 'is_correct'];
-        parent::__construct('options', Option::class, $fillable);
+        $field_config['create'] = ['question_id', 'text', 'is_correct'];
+        $field_config['update'] = ['text', 'is_correct'];
+        parent::__construct('options', Option::class, $field_config);
     }
 
     public function all_by_question_id(int $question_id): array

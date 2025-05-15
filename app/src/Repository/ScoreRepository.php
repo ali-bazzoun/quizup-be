@@ -7,7 +7,8 @@ class ScoreRepository extends BaseRepository
 {
     public function __construct()
     {
-        $fillable = ['user_id', 'quiz_id', 'score'];
+        $field_config['create'] = ['user_id', 'quiz_id', 'score'];
+        $field_config['update'] = ['score'];
         parent::__construct('scores', Score::class, $fillable);
     }
 }

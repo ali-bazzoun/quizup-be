@@ -10,8 +10,9 @@ class QuestionRepository extends BaseRepository
 
     public function __construct()
     {
-        $fillable = ['quiz_id', 'text'];
-        parent::__construct('questions', Question::class, $fillable);
+        $field_config['create'] = ['quiz_id', 'text'];
+        $field_config['update'] = ['text'];
+        parent::__construct('questions', Question::class, $field_config);
         $this->option_repo = new OptionRepository();
     }
 
