@@ -10,7 +10,7 @@ class QuizRepository extends BaseRepository
 
     public function __construct()
     {
-        $fillable = ['title', 'quiz_description', 'image_path'];
+        $fillable = ['title', 'description', 'image_path'];
         parent::__construct('quizzes', Quiz::class, $fillable);
         $this->question_repo = new QuestionRepository();
     }

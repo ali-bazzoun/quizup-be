@@ -6,6 +6,6 @@ class Question extends BaseModel
 {
 	public ?int		$id				= NULL;
 	public ?int 	$quiz_id		= NULL;
-	public ?string	$question_text	= NULL;
+	public ?string	$text			= NULL;
 	public array	$options		= [];
 }

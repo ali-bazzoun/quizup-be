@@ -9,13 +9,11 @@ require_once __DIR__ . '/../Util/Logging.php';
 
 class QuizService
 {
-	private \PDO $db;
 	private QuizRepository $quiz_repo;
 	private QuestionService $question_service;
 
 	public function __construct()
 	{
-        $this->db 				= Database::get_connection();
 		$this->question_service	= new QuestionService();
 		$this->quiz_repo 		= new QuizRepository();
 	}
@@ -27,21 +25,21 @@ class QuizService
 			error_handler('Exception', "Quiz title '{$data['title']}' already exists.", __FILE__, __LINE__);
 			throw new DuplicateQuizTitleException("Quiz title '{$data['title']}' already exists.");
 		}
-		$this->db->beginTransaction();
+		$this->quiz_repo->startTransactionIfNotActive();
 		try
 		{
 			$quiz = $this->quiz_repo->create($data);
 			foreach ($data['questions'] ?? [] as $q_data)
 			{
 				$q_data['quiz_id'] = $quiz->id;
-				$question = $this->question_service->create_question($q_data);
+				$question = $this->question_service->create_question($q_data, false);
 			}
-			$this->db->commit();
+			$this->quiz_repo->commitTransaction();
 			return true;
 		}
 		catch (\Throwable $e)
 		{
-			$this->db->rollBack();
+			$this->quiz_repo->rollbackTransaction();
 			error_handler('Error', "Failed to create quiz (rolling back).", __FILE__, __LINE__);
 			throw $e;
 		}
@@ -62,7 +60,8 @@ class QuizService
 					$valid_quizzes[] = $quiz;
 				}
 			}
-			return $valid_quizzes;			
+			// return $valid_quizzes;
+			return $all_quizzes;		
 		}
 		catch (\Throwable $e)
 		{

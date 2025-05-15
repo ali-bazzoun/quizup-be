@@ -45,7 +45,6 @@ class QuestionController
         }
         try
         {
-            $data = normalize_create_question_data($data);
             if ($this->question_service->create_question($data))
                 JsonResponse::success(null, 'Question created successfully');
             return ;

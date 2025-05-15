@@ -1,6 +1,6 @@
 <?php
 
-class DuplicateTitleException extends Exception
+class DuplicateQuizTitleException extends Exception
 {
     public function __construct($message = "Title already exists.", $code = 0, Throwable $previous = null)
     {

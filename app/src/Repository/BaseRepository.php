@@ -6,14 +6,14 @@ require_once __DIR__ . '/../Util/Logging.php';
 
 abstract class BaseRepository
 {
-    protected \PDO 		$db;
+    protected \PDO 		$pdo;
 	protected string	$table;
     protected string	$model_class;
     protected array     $fillable;
 
     public function __construct(string $table, string $model_class, array $fillable)
     {
-        $this->db           = Database::get_connection();
+        $this->pdo           = Database::get_connection();
         $this->table        = $table;
         $this->model_class  = $model_class;
         $this->fillable     = $fillable;
@@ -54,7 +54,7 @@ abstract class BaseRepository
             implode(', ', $placeholders)
         );
         $this->execute_query($sql, $data);
-        $id = (int) $this->db->lastInsertId();
+        $id = (int) $this->pdo->lastInsertId();
         return $this->find($id);
     }
 
@@ -93,7 +93,7 @@ abstract class BaseRepository
     {
         try
         {
-            $stmt = $this->db->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
             switch ($resultType)
             {
@@ -115,6 +115,27 @@ abstract class BaseRepository
         {
             error_handler('Error', $e->getMessage(), $e->getFile(), $e->getLine());
             throw new DatabaseQueryException("Database query failed", 0, $e);
+        }
+    }
+
+    public function startTransactionIfNotActive(): void
+    {
+        if (!$this->pdo->inTransaction()) {
+            $this->pdo->beginTransaction();
+        }
+    }
+
+    public function commitTransaction(): void
+    {
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->commit();
+        }
+    }
+
+    public function rollbackTransaction(): void
+    {
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->rollBack();
         }
     }
 }

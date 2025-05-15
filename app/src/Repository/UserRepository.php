@@ -7,11 +7,11 @@ require_once __DIR__ . '/../Util/Logging.php';
 
 class UserRepository
 {
-    private \PDO $db;
+    private \PDO $pdo;
 
     public function __construct()
     {
-        $this->db = Database::get_connection();
+        $this->pdo = Database::get_connection();
     }
 
     public function exists_by_email(string $email): bool
@@ -66,7 +66,7 @@ class UserRepository
     {
         try
         {
-            $stmt = $this->db->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
 
             switch ($resultType)

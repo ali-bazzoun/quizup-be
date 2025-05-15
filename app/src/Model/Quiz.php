@@ -6,7 +6,7 @@ class Quiz extends BaseModel
 {
 	public ?int		$id					= NULL;
 	public ?string	$title				= NULL;
-	public ?string	$quiz_description	= NULL;
+	public ?string	$description		= NULL;
 	public ?string	$image_path			= NULL;
 	public array	$questions			= [];
 }

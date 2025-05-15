@@ -1,0 +1,32 @@
+1:
+{
+  "title": "General Knowledge Quiz",
+  "questions": [
+    {
+      "text": "What is the capital of France?",
+      "options": [
+        { "text": "Berlin", "is_correct": false },
+        { "text": "Madrid", "is_correct": false },
+        { "text": "Paris", "is_correct": true }
+      ]
+    },
+    {
+      "text": "Which planet is known as the Red Planet?",
+      "options": [
+        { "text": "Venus", "is_correct": false },
+        { "text": "Mars", "is_correct": true },
+        { "text": "Jupiter", "is_correct": false }
+      ]
+    },
+    {
+      "text": "Which language is used for web apps?",
+      "options": [
+        { "text": "Python", "is_correct": true },
+        { "text": "HTML", "is_correct": true },
+        { "text": "C++", "is_correct": false }
+      ]
+    }
+  ]
+}
+
+2:

@@ -7,8 +7,8 @@ require_once __DIR__ . '/../src/Controller/AuthController.php';
 require_once __DIR__ . '/../src/Util/JsonResponse.php';
 require_once __DIR__ . '/../src/Util/Logging.php';
 
-ini_set('display_errors', 0);
-set_error_handler('error_handler');
+// ini_set('display_errors', 0);
+// set_error_handler('error_handler');
 setup_database();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -35,32 +35,32 @@ elseif ($uri === '/api/auth/register' && $method === 'POST')
     (new AuthController())->register(json_request_body());
 
 // Quiz Routes
-elseif ($uri === '/api/quizzes' && $method === 'GET')
+elseif ($uri === '/api/quiz' && $method === 'GET')
     (new QuizController())->get_quizzes();
 
-elseif ($uri === '/api/quizzes' && $method === 'POST')
+elseif ($uri === '/api/quiz' && $method === 'POST')
     (new QuizController())->create_quiz(json_request_body());
 
 elseif (preg_match('#^/api/quiz/(\d+)$#', $uri, $match) && $method === 'PUT')
-    (new QuestionController())->edit_question((int) $match[1], json_request_body());
+    (new QuizController())->edit_quiz((int) $match[1], json_request_body());
 
-elseif (preg_match('#^/api/quizzes/(\d+)$#', $uri, $match) && $method === 'DELETE')
+elseif (preg_match('#^/api/quiz/(\d+)$#', $uri, $match) && $method === 'DELETE')
     (new QuizController())->delete_quiz((int) $match[1]);
 
 // Question Routes
-elseif ($uri === '/api/questions' && $method === 'GET')
+elseif ($uri === '/api/question' && $method === 'GET')
 {
     $quiz_id = isset($_GET['quiz_id']) ? (int)$_GET['quiz_id'] : null;
     (new QuestionController())->get_questions($quiz_id);
 }
 
-elseif ($uri === '/api/questions' && $method === 'POST')
+elseif ($uri === '/api/question' && $method === 'POST')
     (new QuestionController())->create_question(json_request_body());
 
-elseif (preg_match('#^/api/questions/(\d+)$#', $uri, $match) && $method === 'PUT')
+elseif (preg_match('#^/api/question/(\d+)$#', $uri, $match) && $method === 'PUT')
     (new QuestionController())->edit_question((int) $match[1], json_request_body());
 
-elseif (preg_match('#^/api/questions/(\d+)$#', $uri, $match) && $method === 'DELETE')
+elseif (preg_match('#^/api/question/(\d+)$#', $uri, $match) && $method === 'DELETE')
     (new QuestionController())->delete_question((int) $match[1]);
 
 // Not Found

@@ -47,9 +47,9 @@ class QuestionValidator
 			$errors[] = 'Request Body is empty';
 		else
 		{
-			$errors = array_merge($errors, $this->validate_question($option));
+			$errors = array_merge($errors, QuestionValidator::validate_question($data));
 			foreach ($data['options'] ?? [] as $question)
-				$errors = array_merge($errors, $this->validate_option($option));
+				$errors = array_merge($errors, QuestionValidator::validate_option($option));
 		}
 		return $errors;
 	}
@@ -61,9 +61,9 @@ class QuestionValidator
 			$errors[] = 'Request Body is empty';
 		else
 		{
-			$errors = array_merge($errors, $this->validate_question_update($option));
+			$errors = array_merge($errors, QuestionValidator::validate_question_update($data));
 			foreach ($data['options'] ?? [] as $question)
-				$errors = array_merge($errors, $this->validate_option_update($option));
+				$errors = array_merge($errors, QuestionValidator::validate_option_update($option));
 		}
 		return $errors;
 	}

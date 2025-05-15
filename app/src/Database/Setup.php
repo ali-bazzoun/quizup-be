@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Util/Logging.php';
 
 function setup_database()
 {
-    $pdo = Database::get_connection();
+    $db = Database::get_connection();
 
     $tables = [
         'users' => "CREATE TABLE IF NOT EXISTS users (
@@ -51,10 +51,10 @@ function setup_database()
 
     foreach ($tables as $name => $sql)
     {
-        $stmt = $pdo->query("SHOW TABLES LIKE '$name'");
+        $stmt = $db->query("SHOW TABLES LIKE '$name'");
         if ($stmt->rowCount() > 0) 
             $done = 1;
         else 
-            $pdo->exec($sql);
+            $db->exec($sql);
     }
 }

@@ -9,20 +9,18 @@ require_once __DIR__ . '/../Util/Logging.php';
 
 class QuestionService
 {
-	private \PDO $db;
 	private QuizRepository $quiz_repo;
 	private OptionRepository $option_repo;
 	private QuestionRepository $question_repo;
 
 	public function __construct()
 	{
-		$this->db				= Database::get_connection();
 		$this->quiz_repo		= new QuizRepository();
 		$this->question_repo	= new QuestionRepository();
 		$this->option_repo		= new OptionRepository();
 	}
 
-	public function create_question(array $data): bool
+	public function create_question(array $data, bool $commit = true): bool
 	{
 		$quiz_id = $data['quiz_id'];
 		if (!$this->quiz_repo->exists($quiz_id))
@@ -30,22 +28,27 @@ class QuestionService
 			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-		$this->db->beginTransaction();
+		$this->question_repo->startTransactionIfNotActive();
 		try
 		{
 			$question = $this->question_repo->create($data);
 			foreach ($data['options'] ?? [] as $opt_data)
 			{
 				$opt_data['question_id'] = $question->id;
+				if($opt_data['is_correct'])
+					$opt_data['is_correct'] = 1;
+				else
+					$opt_data['is_correct'] = 0;
 				$this->option_repo->create($opt_data);
 			}
-			$this->db->commit();
+			if ($commit)
+				$this->question_repo->commitTransaction();
 			return true;
 		}
 		catch (\Throwable $e)
 		{
-			$this->db->rollBack();
-			error_handler("Failed to create question (rolling back).", __FILE__, __LINE__);
+			$this->question_repo->rollbackTransaction();
+			error_handler('Error', "Failed to create question (rolling back).", __FILE__, __LINE__);
 			throw $e;
 		}
 	}
