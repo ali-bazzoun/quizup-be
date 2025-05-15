@@ -7,17 +7,31 @@ require_once __DIR__ . '/../src/Controller/AuthController.php';
 require_once __DIR__ . '/../src/Util/JsonResponse.php';
 require_once __DIR__ . '/../src/Util/Logging.php';
 
-// ini_set('display_errors', 0);
-// set_error_handler('error_handler');
+ini_set('display_errors', 0);
+set_error_handler('error_handler');
 setup_database();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
+function handle_cors()
+{
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit();
+    }
+}
+
 function json_request_body(): array
 {
     return json_decode(file_get_contents('php://input'), true) ?? [];
 }
+
+handle_cors();
 
 // Home
 if ($uri === '/')
@@ -37,6 +51,9 @@ elseif ($uri === '/api/auth/register' && $method === 'POST')
 // Quiz Routes
 elseif ($uri === '/api/quiz' && $method === 'GET')
     (new QuizController())->get_quizzes();
+
+elseif (preg_match('#^/api/quiz/(\d+)$#', $uri, $match) && $method === 'GET')
+    (new QuizController())->get_quiz_by_id((int) $match[1]);
 
 elseif ($uri === '/api/quiz' && $method === 'POST')
     (new QuizController())->create_quiz(json_request_body());

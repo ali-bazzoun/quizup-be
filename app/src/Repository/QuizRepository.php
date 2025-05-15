@@ -23,6 +23,13 @@ class QuizRepository extends BaseRepository
         return $result !== false;
     }
 
+    public function find_by_id_with_questions_and_options(int $id)
+    {
+        $quiz = $this->find($id);
+        $quiz->questions = $this->question_repo->all_by_quiz_id_with_options($id);
+        return $quiz;
+    }
+
     public function all_with_questions_and_options(): array
     {
         $quizzes = $this->all();

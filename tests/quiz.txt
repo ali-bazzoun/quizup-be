@@ -1,6 +1,7 @@
 1:
 {
   "title": "General Knowledge Quiz",
+  "description": "jijal",
   "questions": [
     {
       "text": "What is the capital of France?",
@@ -22,7 +23,7 @@
       "text": "Which language is used for web apps?",
       "options": [
         { "text": "Python", "is_correct": true },
-        { "text": "HTML", "is_correct": true },
+        { "text": "HTML", "is_correct": false },
         { "text": "C++", "is_correct": false }
       ]
     }

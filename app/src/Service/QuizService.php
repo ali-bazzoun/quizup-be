@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../Model/Quiz.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Repository/QuizRepository.php';
 require_once __DIR__ . '/QuestionService.php';
@@ -41,6 +42,39 @@ class QuizService
 		{
 			$this->quiz_repo->rollbackTransaction();
 			error_handler('Error', "Failed to create quiz (rolling back).", __FILE__, __LINE__);
+			throw $e;
+		}
+	}
+
+	public function get_valid_quiz_by_id(int $id): ?Quiz
+	{
+		if (!$this->quiz_repo->exists($id))
+		{
+			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
+			throw new IdNotExistException("Quiz with ID $id does not exist.");
+		}
+		try
+		{
+			$quiz = $this->quiz_repo->find_by_id_with_questions_and_options($id);
+			$valid_questions = [];
+			foreach ($quiz->questions ?? [] as $question)
+			{
+				$count_correct = 0;
+				foreach ($question->options ?? [] as $option)
+					if ($option->is_correct == 1)
+						$count_correct = $count_correct + 1;
+				if ($count_correct == 1)
+					$valid_questions[] = $question;
+			}
+			$quiz->questions = $valid_questions;
+						// error_log(print_r($quiz, true), 0);
+			if (count($quiz->questions) < 3)
+				return null;
+			return $quiz;
+		}
+		catch (\Exception $e)
+		{
+			error_handler('Error', "Get valid quiz failed (service).", __FILE__, __LINE__);
 			throw $e;
 		}
 	}

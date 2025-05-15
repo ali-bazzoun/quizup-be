@@ -30,6 +30,31 @@ class QuizController
         JsonResponse::error('Get quizzes failed.');
     }
 
+    public function get_quiz_by_id(?int $id)
+    {
+        if (!$id)
+        {
+            JsonResponse::error("ID is missing", 400);
+            return ;
+        }
+        try
+        {
+            $quiz = $this->quiz_service->get_valid_quiz_by_id($id);
+            if (!$quiz)
+            { 
+                JsonResponse::error('quiz is missing');
+                return ;
+            }
+            JsonResponse::success(['quiz' => $quiz], 'Valid Quiz');
+            return ;
+        }
+        catch (\Exception $e)
+        {
+            error_handler('Exception', $e-getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error('Get quiz failed.');
+        }
+    }
+
     public function create_quiz(array $data): void
     {
         $errors = QuizValidator::validate_create_data($data);
