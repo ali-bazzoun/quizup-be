@@ -104,7 +104,7 @@ class QuestionService
 		}
 		try
 		{
-			return $this->question_repo->delete($id, $data);
+			return $this->question_repo->delete($id);
 		}
 		catch (\Throwable $e)
 		{

@@ -57,7 +57,7 @@ class QuestionController
 
     public function edit_question(?int $id, array $data): void
     {
-        if (!id)
+        if (!$id)
         {
             JsonResponse::error("Missing ID.", 400);
             return ;
