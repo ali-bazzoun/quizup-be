@@ -2,11 +2,20 @@
 
 class QuizValidator
 {
+	private static function validate_string_format(string $str): bool
+	{
+		if ($str[0] === ' ' || substr($str, -1) === ' ')
+			return false;
+		return true;
+	}
+
 	private static function validate_quiz(array $data): array
 	{
 		$errors = [];
 		if (empty($data['title']))
-			$errors[] =  'Title cannot be empty';
+			$errors[] = 'Title cannot be empty';
+		elseif (!QuizValidator::validate_string_format($data['title']))
+			$errors[] = 'Title format is not valid';
 		return $errors;
 	}
 
@@ -14,7 +23,9 @@ class QuizValidator
 	{
 		$errors = [];
 		if (empty($data['text']))
-			$errors[] =  'Question cannot be empty';
+			$errors[] =  'Question text cannot be empty';
+		elseif (!QuizValidator::validate_string_format($data['text']))
+			$errors[] = 'Question text format is not valid';
 		return $errors;
 	}
 
@@ -23,10 +34,12 @@ class QuizValidator
 		$errors = [];
 		if (empty($data['text']))
 			$errors[] = 'Option text cannot be empty';
+		elseif (!QuizValidator::validate_string_format($data['text']))
+			$errors[] = 'Option text format is not valid';
 		if (!array_key_exists('is_correct', $data))
-			$errors[] = 'Option must have is_correct set (true or false)';
+			$errors[] = 'Option must have is_correct set';
 		elseif (!is_bool($data['is_correct']))
-			$errors[] = 'is_correct must be a boolean (true or false)';
+			$errors[] = 'is_correct must be a boolean';
 		return $errors;
 	}
 
@@ -43,6 +56,8 @@ class QuizValidator
 		$errors = [];
 		if (isset($data['text']) && empty($data['text']))
 			$errors[] = 'Question cannot be empty';
+		elseif (!QuizValidator::validate_string_format($data['text']))
+			$errors[] = 'Option text format is not valid';
 		return $errors;
 	}
 
@@ -52,7 +67,7 @@ class QuizValidator
 		if (isset($data['text']) && empty($data['text']))
 			$errors[] = 'Option text cannot be empty';
 		if (array_key_exists('is_correct', $data) && !is_bool($data['is_correct']))
-			$errors[] = 'Option must have is_correct set (true or false)';
+			$errors[] = 'Option must have boolean is_correct';
 		return $errors;
 	}
 

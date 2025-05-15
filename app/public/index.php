@@ -7,8 +7,8 @@ require_once __DIR__ . '/../src/Controller/AuthController.php';
 require_once __DIR__ . '/../src/Util/JsonResponse.php';
 require_once __DIR__ . '/../src/Util/Logging.php';
 
-// ini_set('display_errors', 0);
-// set_error_handler('error_handler');
+ini_set('display_errors', 0);
+set_error_handler('error_handler');
 setup_database();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

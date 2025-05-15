@@ -36,7 +36,7 @@ class QuizController
         $errors = QuizValidator::validate_create_data($data);
         if ($errors)
         {
-            error_handler('Exception', "Validation failed: " . print_r($errors, true), __FILE__, __LINE__);
+            error_handler('Exception', "Validation failed: " . $errors[0], __FILE__, __LINE__);
             JsonResponse::error('Invalid input', 422);
             return ;
         }
@@ -71,7 +71,7 @@ class QuizController
         $errors = QuizValidator::validate_update_data($data);
         if ($errors)
         {
-            error_handler('Exception', "Validation failed: " . print_r($errors, true), __FILE__, __LINE__);
+            error_handler('Exception', "Validation failed: " . $errors[0], __FILE__, __LINE__);
             JsonResponse::error('Invalid input', 422);
             return ;
         }

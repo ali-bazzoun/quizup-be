@@ -60,8 +60,8 @@ class QuizService
 					$valid_quizzes[] = $quiz;
 				}
 			}
-			// return $valid_quizzes;
-			return $all_quizzes;		
+			return $valid_quizzes;
+			// return $all_quizzes;		
 		}
 		catch (\Throwable $e)
 		{

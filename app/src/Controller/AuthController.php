@@ -26,8 +26,8 @@ class AuthController
         $errors = RegisterValidator::validate($request);
         if ($errors)
         {
+            error_handler('Exception', "Validation failed: " . $errors[0], __FILE__, __LINE__);
             JsonResponse::error('Invalid input', 422);
-            error_handler('Exception', "Validation failed: " . print_r($errors, true), __FILE__, __LINE__);
             return;
         }
         try
@@ -39,6 +39,7 @@ class AuthController
                 return ;
             }
             JsonResponse::success(['user' => $user], 'Register successful');
+            return ;
         }
         catch (RegisterExistedEmailException $e)
         {
@@ -49,6 +50,7 @@ class AuthController
         {
             error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
             JsonResponse::error('Unexpected error', 500);
+            return ;
         }
     }
 
@@ -62,7 +64,7 @@ class AuthController
         $errors = LoginValidator::validate($request);
         if ($errors)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            error_handler('Exception', "Validation failed: " . $errors[0], __FILE__, __LINE__);
             JsonResponse::error('Invalid input', 422);
             return ;
         }
@@ -80,6 +82,7 @@ class AuthController
         {
             error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
             JsonResponse::error('Unexpected error', 500);
+            return ;
         }
     }
 }

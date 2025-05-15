@@ -16,9 +16,9 @@ class QuestionValidator
 		if (empty($data['text']))
 			$errors[] = 'Option text cannot be empty';
 		if (!array_key_exists('is_correct', $data))
-			$errors[] = 'Option must have is_correct set (true or false)';
+			$errors[] = 'Option must have is_correct';
 		elseif (!is_bool($data['is_correct']))
-			$errors[] = 'is_correct must be a boolean (true or false)';
+			$errors[] = 'is_correct must be a boolean';
 		return $errors;
 	}
 
@@ -36,7 +36,7 @@ class QuestionValidator
 		if (isset($data['text']) && empty($data['text']))
 			$errors[] = 'Option text cannot be empty';
 		if (array_key_exists('is_correct', $data) && !is_bool($data['is_correct']))
-			$errors[] = 'Option must have is_correct set (true or false)';
+			$errors[] = 'Option must have boolean is_correct';
 		return $errors;
 	}
 
