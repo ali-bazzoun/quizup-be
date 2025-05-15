@@ -82,11 +82,11 @@ abstract class BaseRepository
         return $affected_rows > 0;
     }
 
-    protected function filter_allowed_data(array $allowed_fields): array
+    protected function filter_allowed_data(array $data, array $allowed_fields): array
     {
         $filtered_data = [];
         foreach($data as $key => $value)
-            if (in_array($key, $this->allowed_fields))
+            if (in_array($key, $allowed_fields))
                 $filtered_data[$key] = $value;
         return $filtered_data;
     }
