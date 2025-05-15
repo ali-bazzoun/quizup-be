@@ -6,4 +6,4 @@
 
 - **Data Integrity:** When data is deleted, there is no residual or garbage data. For example, when a user is deleted, all associated scores and data related to that user are also removed.
 
-- **Observability:** The project integrates logging and metrics to ensure full observability of system behavior and performance, aiding in debugging and monitoring.
+- **Observability:** The project integrates logging to ensure full observability of system behavior and performance, aiding in debugging and monitoring.

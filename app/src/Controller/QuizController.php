@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../Service/QuizService.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
 require_once __DIR__ . '/../Util/QuizValidator.php';
-require_once __DIR__ . '/../Util/Normalizer.php';
 require_once __DIR__ . '/../Exception/DuplicateQuizTitleException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
