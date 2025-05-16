@@ -21,9 +21,12 @@ class Database
         if (self::$pdo === null) {
             $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$db . ";charset=" . self::$charset;
 
-            try {
+            try 
+            {
                 self::$pdo = new PDO($dsn, self::$user, self::$pass, self::$options);
-            } catch (PDOException $e) {
+            } 
+            catch (PDOException $e) 
+            {
                 die("Database connection failed: " . $e->getMessage());
             }
         }

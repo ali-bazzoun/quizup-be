@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Service/QuestionService.php';
 require_once __DIR__ . '/../Util/JsonResponse.php';
 require_once __DIR__ . '/../Util/QuestionValidator.php';
+require_once __DIR__ . '/../Exception/IdNotExistException.php';
 
 class QuestionController
 {
@@ -26,11 +27,11 @@ class QuestionController
             JsonResponse::success(['questions' => $questions], 'Valid Questions');
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error("Get questions failed.", 400);
     }
 
     public function create_question(array $data): void
@@ -46,13 +47,15 @@ class QuestionController
         {
             if ($this->question_service->create_question($data))
                 JsonResponse::success(null, 'Question created successfully');
+            else
+                JsonResponse::error("create questions failed.", 400);
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error("create questions failed.", 400);
     }
 
     public function edit_question(?int $id, array $data): void
@@ -73,13 +76,15 @@ class QuestionController
         {
             if ($this->question_service->edit_question($id, $data))
                 JsonResponse::success(null, 'Question updated successfully');
+            else
+                JsonResponse::error('Update failed', 400);
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error('Update failed', 400);
     }
 
     public function delete_question(?int $id): void
@@ -93,12 +98,14 @@ class QuestionController
         {
             if ($this->question_service->delete_question($id))
                 JsonResponse::success(null, 'Question deleted successfully');
+            else
+                JsonResponse::error('Delete failed', 400);
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error('Delete failed', 400);
     }
 }

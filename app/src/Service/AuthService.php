@@ -19,20 +19,12 @@ class AuthService
 
     public function attempt_login(string $email, string $password): ?UserDTO
     {
-        try
-        {
-            $user = $this->user_repo->find_by_email($email);
+        $user = $this->user_repo->find_by_email($email);
             if (!$user)
                 return null;
-            if (!password_verify($password, $user->password_hash))
-                return null;
-            return new UserDTO($user);
-        }
-        catch (\Throwable $e)
-        {
-            error_handler('Error', "Login failed (service)", __FILE__, __LINE__);
-            throw $e;
-        }
+        if (!password_verify($password, $user->password_hash))
+            return null;
+        return new UserDTO($user);
     }
 
     public function attempt_register(string $email, string $password): ?UserDTO
@@ -42,18 +34,10 @@ class AuthService
             error_handler('Exception', "Email already exists.", __FILE__, __LINE__);
             throw new RegisterExistedEmailException();
         }
-        try
-        {
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            $success = $this->user_repo->create(['email' => $email, 'password_hash' => $password_hash]);
-            if (!$success)
-                return null;
-            return new UserDTO($this->user_repo->find_by_email($email));
-        }
-        catch (\Throwable $e)
-        {
-            error_handler('Error', "Register failed (service)", __FILE__, __LINE__);
-            throw $e;
-        }
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        $success = $this->user_repo->create(['email' => $email, 'password_hash' => $password_hash]);
+        if (!$success)
+            return null;
+        return new UserDTO($this->user_repo->find_by_email($email));
     }
 }

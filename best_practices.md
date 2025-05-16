@@ -66,6 +66,10 @@ Stick to this minimum structure for clarity:
 - Mockery or PHPUnit built-in mocks – mocking DB behavior
 - Faker – for generating fake test data
 
+## error handling
+
+- [PHP Error Handling Best Practices](https://bestpractices.thecodingmachine.com/php/error_handling.html)
+
 ## solid principles
 
 ### Single Responsibility Principle (SRP)

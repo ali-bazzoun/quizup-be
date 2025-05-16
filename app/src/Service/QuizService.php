@@ -38,7 +38,7 @@ class QuizService
 			$this->quiz_repo->commitTransaction();
 			return true;
 		}
-		catch (\Throwable $e)
+		catch (Throwable $e)
 		{
 			$this->quiz_repo->rollbackTransaction();
 			error_handler('Error', "Failed to create quiz (rolling back).", __FILE__, __LINE__);
@@ -53,55 +53,38 @@ class QuizService
 			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-		try
+		$quiz = $this->quiz_repo->find_by_id_with_questions_and_options($id);
+		$valid_questions = [];
+		foreach ($quiz->questions ?? [] as $question)
 		{
-			$quiz = $this->quiz_repo->find_by_id_with_questions_and_options($id);
-			$valid_questions = [];
-			foreach ($quiz->questions ?? [] as $question)
-			{
-				$count_correct = 0;
-				foreach ($question->options ?? [] as $option)
-					if ($option->is_correct == 1)
-						$count_correct = $count_correct + 1;
-				if ($count_correct == 1)
-					$valid_questions[] = $question;
-			}
-			$quiz->questions = $valid_questions;
-						// error_log(print_r($quiz, true), 0);
-			if (count($quiz->questions) < 3)
-				return null;
-			return $quiz;
+			$count_correct = 0;
+			foreach ($question->options ?? [] as $option)
+				if ($option->is_correct == 1)
+					$count_correct = $count_correct + 1;
+			if ($count_correct == 1)
+				$valid_questions[] = $question;
 		}
-		catch (\Exception $e)
-		{
-			error_handler('Error', "Get valid quiz failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+		$quiz->questions = $valid_questions;
+		if (count($quiz->questions) < 3)
+			return null;
+		return $quiz;
 	}
 
 	public function get_valid_quizzes(): array
 	{
-		try
+		$valid_quizzes = [];
+		$all_quizzes = $this->quiz_repo->all();
+		foreach ($all_quizzes as $quiz)
 		{
-			$valid_quizzes = [];
-			$all_quizzes = $this->quiz_repo->all();
-			foreach ($all_quizzes as $quiz)
+			$questions = $this->question_service->get_valid_questions($quiz->id);
+			if (count($questions) > 2)
 			{
-				$questions = $this->question_service->get_valid_questions($quiz->id);
-				if (count($questions) > 2)
-				{
-					$quiz->questions = $questions;
-					$valid_quizzes[] = $quiz;
-				}
+				$quiz->questions = $questions;
+				$valid_quizzes[] = $quiz;
 			}
-			return $valid_quizzes;
-			// return $all_quizzes;		
 		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Get valid quizzes failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+		return $valid_quizzes;
+		// return $all_quizzes;		
 	}
 
 	public function edit_quiz(int $id, array $data): bool
@@ -111,15 +94,7 @@ class QuizService
 			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-		try
-		{
-			return $this->quiz_repo->update($id, $data);
-		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Quiz update failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+		return $this->quiz_repo->update($id, $data);
     }
 
     public function delete_quiz(int $id): bool
@@ -129,14 +104,6 @@ class QuizService
 			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-		try
-		{
-        	return $this->quiz_repo->delete($id);
-		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Quiz delete failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+        return $this->quiz_repo->delete($id);
     }
 }

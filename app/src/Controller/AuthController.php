@@ -43,13 +43,7 @@ class AuthController
         }
         catch (RegisterExistedEmailException $e)
         {
-            JsonResponse::error("Registered email.", 400);
-            return ;
-        }
-        catch (\Exception $e)
-        {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
-            JsonResponse::error('Unexpected error', 500);
+            JsonResponse::error($e->getMessage(), 409);
             return ;
         }
     }
@@ -68,21 +62,12 @@ class AuthController
             JsonResponse::error('Invalid input', 422);
             return ;
         }
-        try
+        $user = $this->auth_service->attempt_login($request['email'], $request['password']);
+        if (!$user)
         {
-            $user = $this->auth_service->attempt_login($request['email'], $request['password']);
-            if (!$user)
-            {
-                JsonResponse::error('Invalid credentials', 401);
-                return ;
-            }
-            JsonResponse::success(['user' => $user], 'Login successful');
-        }
-        catch (\Exception $e)
-        {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
-            JsonResponse::error('Unexpected error', 500);
+            JsonResponse::error('Invalid email or password', 401);
             return ;
         }
+        JsonResponse::success(['user' => $user], 'Login successful');
     }
 }

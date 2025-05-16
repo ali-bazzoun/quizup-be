@@ -17,17 +17,9 @@ class QuizController
 
     public function get_quizzes(): void
     {
-        try
-        {
-            $quizzes = $this->quiz_service->get_valid_quizzes();
-            JsonResponse::success(['quizzes' => $quizzes], 'Valid Quizzes');
-            return ;
-        }
-        catch (\Exception $e)
-        {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
-        }
-        JsonResponse::error('Get quizzes failed.');
+        $quizzes = $this->quiz_service->get_valid_quizzes();
+        JsonResponse::success(['quizzes' => $quizzes], 'Valid Quizzes');
+        return ;
     }
 
     public function get_quiz_by_id(?int $id)
@@ -37,22 +29,14 @@ class QuizController
             JsonResponse::error("ID is missing", 400);
             return ;
         }
-        try
-        {
-            $quiz = $this->quiz_service->get_valid_quiz_by_id($id);
-            if (!$quiz)
-            { 
-                JsonResponse::error('quiz is missing');
-                return ;
-            }
-            JsonResponse::success(['quiz' => $quiz], 'Valid Quiz');
+        $quiz = $this->quiz_service->get_valid_quiz_by_id($id);
+        if (!$quiz)
+        { 
+            JsonResponse::error('quiz is missing');
             return ;
         }
-        catch (\Exception $e)
-        {
-            error_handler('Exception', $e-getMessage(), $e->getFile(), $e->getLine());
-            JsonResponse::error('Get quiz failed.');
-        }
+        JsonResponse::success(['quiz' => $quiz], 'Valid Quiz');
+        return ;
     }
 
     public function create_quiz(array $data): void
@@ -73,15 +57,10 @@ class QuizController
                 JsonResponse::error('Failed to create quiz', 500);
             return ;
         }
-        catch (\DuplicateQuizTitleException $e)
+        catch (DuplicateQuizTitleException $e)
         {
             JsonResponse::error($e->getMessage(), 409);
             return ;
-        }
-        catch (\Exception $e)
-        {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
-            JsonResponse::error('Create failed', 400);
         }
     }
 
@@ -103,13 +82,15 @@ class QuizController
         {
             if ($this->quiz_service->edit_quiz($id, $data))
                 JsonResponse::success(null, 'Quiz updated successfully');
+            else
+                JsonResponse::error('Update failed', 400);
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error('Update failed', 400);
     }
 
     public function delete_quiz(?int $id): void
@@ -121,14 +102,16 @@ class QuizController
         }
         try
         {
-            if ($this->quiz_service->delete_quiz($id))
+             if ($this->quiz_service->delete_quiz($id))
                 JsonResponse::success(null, 'Quiz deleted successfully');
+            else
+                JsonResponse::error('Delete failed', 400);
             return ;
         }
-        catch (\Exception $e)
+        catch (IdNotExistException $e)
         {
-            error_handler('Exception', $e->getMessage(), $e->getFile(), $e->getLine());
+            JsonResponse::error($e->getMessage(), 409);
+            return ;
         }
-        JsonResponse::error('Delete failed', 400);
     }
 }

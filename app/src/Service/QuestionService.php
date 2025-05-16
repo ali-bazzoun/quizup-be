@@ -45,7 +45,7 @@ class QuestionService
 				$this->question_repo->commitTransaction();
 			return true;
 		}
-		catch (\Throwable $e)
+		catch (Throwable $e)
 		{
 			$this->question_repo->rollbackTransaction();
 			error_handler('Error', "Failed to create question (rolling back).", __FILE__, __LINE__);
@@ -60,21 +60,12 @@ class QuestionService
 			error_handler('Exception', "Quiz with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Quiz with ID $id does not exist.");
 		}
-		try
-		{
-			$questions =  $this->question_repo->all_by_quiz_id_with_options($quiz_id);
-			$valid_questions = [];
-			foreach($questions as $question)
-				if (count($question->options) > 1)
-					$valid_questions[] = $question;
-			return $valid_questions;
-		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Get valid questions failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
-
+		$questions =  $this->question_repo->all_by_quiz_id_with_options($quiz_id);
+		$valid_questions = [];
+		foreach($questions as $question)
+			if (count($question->options) > 1)
+				$valid_questions[] = $question;
+		return $valid_questions;
 	}
 
 	public function edit_question(int $id, array $data): bool
@@ -84,15 +75,7 @@ class QuestionService
 			error_handler('Exception', "Question with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Question with ID $id does not exist.");
 		}
-		try
-		{
-			return $this->question_repo->update($id, $data);
-		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Question update failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+		return $this->question_repo->update($id, $data);
 	}
 
 	public function delete_question(int $id): bool
@@ -102,14 +85,6 @@ class QuestionService
 			error_handler('Exception', "Question with ID $id does not exist.", __FILE__, __LINE__);
 			throw new IdNotExistException("Question with ID $id does not exist.");
 		}
-		try
-		{
-			return $this->question_repo->delete($id);
-		}
-		catch (\Throwable $e)
-		{
-			error_handler('Error', "Question delete failed (service).", __FILE__, __LINE__);
-			throw $e;
-		}
+		return $this->question_repo->delete($id, $data);
 	}
 }

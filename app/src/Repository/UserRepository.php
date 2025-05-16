@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../Model/User.php';
 require_once __DIR__ . '/../../config/database.php';
-require_once __DIR__ . '/../Exception/DatabaseQueryException.php';
 require_once __DIR__ . '/../Util/Logging.php';
 
 class UserRepository
@@ -64,31 +63,23 @@ class UserRepository
 
     protected function execute_query(string $sql, array $params = [], string $resultType = 'row_count')
     {
-        try
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        switch ($resultType)
         {
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($params);
+            case 'fetch': 
+                return $stmt->fetch(PDO::FETCH_ASSOC);
 
-            switch ($resultType)
-            {
-                case 'fetch': 
-                    return $stmt->fetch(PDO::FETCH_ASSOC);
+            case 'fetch_all':
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                case 'fetch_all':
-                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            case 'row_count':
+                return $stmt->rowCount();
 
-                case 'row_count':
-                    return $stmt->rowCount();
-
-                default:
-                    error_handler('Error', "Invalid result type: $resultType", __FILE__, __LINE__);
-                    throw new InvalidArgumentException("Invalid result type specified.");
-            }
-        }
-        catch (PDOException $e)
-        {
-            error_handler('Error', $e->getMessage(), $e->getFile(), $e->getLine());
-            throw new DatabaseQueryException("Query failed: $sql", 0, $e);
+            default:
+                error_handler('Error', "Invalid result type: $resultType", __FILE__, __LINE__);
+                throw new InvalidArgumentException("Invalid result type specified at execute query..");
         }
     }
 }
