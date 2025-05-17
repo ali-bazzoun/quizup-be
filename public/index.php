@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../app/database/setup.php';
-require_once __DIR__ . '/../app/database/seed.php';
 require_once __DIR__ . '/../app/src/Controller/QuizController.php';
 require_once __DIR__ . '/../app/src/Controller/QuestionController.php';
 require_once __DIR__ . '/../app/src/Controller/AuthController.php';
@@ -10,9 +8,6 @@ require_once __DIR__ . '/../app/src/Util/Logging.php';
 
 // ini_set('display_errors', 0);
 // set_error_handler('error_handler');
-
-setup_database();
-seed_data();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];

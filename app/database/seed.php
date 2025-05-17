@@ -106,3 +106,7 @@ function seed_data()
         throw $e;
     }
 }
+
+if (php_sapi_name() === 'cli' && basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
+    seed_data();
+}

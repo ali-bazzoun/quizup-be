@@ -15,4 +15,4 @@ RUN chmod +x /var/www/app/scripts/startup.sh
 
 EXPOSE 80
 
-# CMD ["/var/www/app/scripts/startup.sh"]
+CMD ["/var/www/app/scripts/startup.sh"]
