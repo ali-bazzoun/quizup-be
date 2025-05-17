@@ -14,13 +14,8 @@ class QuestionController
         $this->question_service = new QuestionService();
     }
 
-    public function get_questions(?int $quiz_id): void
+    public function get_questions(int $quiz_id): void
     {
-        if (!$quiz_id)
-        {
-            JsonResponse::error("Missing quiz ID.", 400);
-	        return ;
-        }
         try
         {
             $questions = $this->question_service->get_valid_questions($quiz_id);
@@ -58,13 +53,8 @@ class QuestionController
         }
     }
 
-    public function edit_question(?int $id, array $data): void
+    public function edit_question(int $id, array $data): void
     {
-        if (!$id)
-        {
-            JsonResponse::error("Missing ID.", 400);
-            return ;
-        }
         $errors = QuestionValidator::validate_update_data($data);
         if ($errors)
         {
@@ -87,13 +77,8 @@ class QuestionController
         }
     }
 
-    public function delete_question(?int $id): void
+    public function delete_question(int $id): void
     {
-        if (!$id)
-        {
-            JsonResponse::error("Missing ID", 400);
-            return ;
-        }
         try
         {
             if ($this->question_service->delete_question($id))

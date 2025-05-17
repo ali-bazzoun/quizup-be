@@ -22,13 +22,8 @@ class QuizController
         return ;
     }
 
-    public function get_quiz_by_id(?int $id)
+    public function get_quiz_by_id(int $id)
     {
-        if (!$id)
-        {
-            JsonResponse::error("ID is missing", 400);
-            return ;
-        }
         $quiz = $this->quiz_service->get_valid_quiz_by_id($id);
         if (!$quiz)
         { 
@@ -64,13 +59,8 @@ class QuizController
         }
     }
 
-    public function edit_quiz(?int $id, array $data): void
+    public function edit_quiz(int $id, array $data): void
     {
-        if (!$id)
-        {
-            JsonResponse::error("ID is missing", 400);
-            return ;
-        }
         $errors = QuizValidator::validate_update_data($data);
         if ($errors)
         {
@@ -93,13 +83,8 @@ class QuizController
         }
     }
 
-    public function delete_quiz(?int $id): void
+    public function delete_quiz(int $id): void
     {
-        if (!$id)
-        {
-            JsonResponse::error("Missing ID", 400);
-            return ;
-        }
         try
         {
              if ($this->quiz_service->delete_quiz($id))
