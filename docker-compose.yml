@@ -1,11 +1,11 @@
 services:
   php:
     build: .
+    image: quizup-php:latest
     container_name: php-app
     volumes:
-      - ./app/public:/var/www/html
-      - ./app/src:/var/www/src
-      - ./app/config:/var/www/config
+      - ./public:/var/www/html
+      - ./app:/var/www/app
     ports:
       - "8000:80"
     depends_on:

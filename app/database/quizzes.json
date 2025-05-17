@@ -1,0 +1,88 @@
+[
+  {
+    "title": "General Knowledge",
+    "description": "A quiz to test your general knowledge.",
+    "questions": [
+      {
+        "text": "What is the capital of France?",
+        "options": [
+          { "text": "Paris", "is_correct": true },
+          { "text": "Berlin", "is_correct": false },
+          { "text": "Madrid", "is_correct": false }
+        ]
+      },
+      {
+        "text": "Which planet is known as the Red Planet?",
+        "options": [
+          { "text": "Mars", "is_correct": true },
+          { "text": "Venus", "is_correct": false }
+        ]
+      },
+      {
+        "text": "Who wrote 'Hamlet'?",
+        "options": [
+          { "text": "William Shakespeare", "is_correct": true },
+          { "text": "Charles Dickens", "is_correct": false },
+          { "text": "Mark Twain", "is_correct": false }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Science & Nature",
+    "description": "Test your knowledge about science and the natural world.",
+    "questions": [
+      {
+        "text": "What is the chemical symbol for water?",
+        "options": [
+          { "text": "H2O", "is_correct": true },
+          { "text": "CO2", "is_correct": false },
+          { "text": "NaCl", "is_correct": false }
+        ]
+      },
+      {
+        "text": "How many legs does a spider have?",
+        "options": [
+          { "text": "8", "is_correct": true },
+          { "text": "6", "is_correct": false }
+        ]
+      },
+      {
+        "text": "What gas do plants absorb from the atmosphere?",
+        "options": [
+          { "text": "Carbon dioxide", "is_correct": true },
+          { "text": "Oxygen", "is_correct": false }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Technology",
+    "description": "A quiz about modern technology and computing.",
+    "questions": [
+      {
+        "text": "What does 'HTTP' stand for?",
+        "options": [
+          { "text": "HyperText Transfer Protocol", "is_correct": true },
+          { "text": "Hyperlink Transmission Protocol", "is_correct": false },
+          { "text": "High Transfer Text Protocol", "is_correct": false }
+        ]
+      },
+      {
+        "text": "What company developed the Android operating system?",
+        "options": [
+          { "text": "Google", "is_correct": true },
+          { "text": "Apple", "is_correct": false }
+        ]
+      },
+      {
+        "text": "What is the name of the first electronic general-purpose computer?",
+        "options": [
+          { "text": "ENIAC", "is_correct": true },
+          { "text": "UNIVAC", "is_correct": false },
+          { "text": "IBM 701", "is_correct": false }
+        ]
+      }
+    ]
+  }
+]

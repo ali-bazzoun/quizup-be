@@ -1,12 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../../config/database.php';
-require_once __DIR__ . '/../Util/Logging.php';
+require_once __DIR__ . '/../config/database.php';
 
 function setup_database()
 {
-    $db = Database::get_connection();
-
     $tables = [
         'users' => "CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,6 +46,7 @@ function setup_database()
         )"
     ];
 
+    $db = Database::get_connection();
     foreach ($tables as $name => $sql)
     {
         $stmt = $db->query("SHOW TABLES LIKE '$name'");
