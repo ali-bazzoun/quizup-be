@@ -96,7 +96,7 @@ function seed_data()
     try
     {
         seed_users($db);
-        seed_quizzes($db, __DIR__ . '/quizzes.json');
+        seed_quizzes($db, __DIR__ . '/seed-quizzes.json');
         $db->commit();
     }
     catch (Exception $e)
